@@ -65,7 +65,6 @@
         #card-back-area { width: 100%; text-align: center; }
         .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 12px 0; color: #fff; }
         
-        /* 讓例句區塊看起來可以點擊，並增加提示感 */
         .word-ex { 
             font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; 
             background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; 
@@ -124,7 +123,6 @@
                 
                 <div id="card-back-area" style="display:none;">
                     <p class="word-ch" id="card-ch"></p>
-                    <!-- 修改這裡：加入點擊朗讀例句功能，並阻止事件冒泡防止點例句時又把卡片翻回去 -->
                     <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
                         <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
                         <span id="card-ex"></span>
@@ -135,7 +133,7 @@
             </div>
             <div class="ctrl-btns">
                 <button class="action-btn" style="background-color: #64748b;" onclick="prevWord()">上一個</button>
-                <button class="action-btn" onclick="nextWord()">下一個</button>
+                <button class="action-btn" onclick="nextWord()">下一個 (隨機)</button>
             </div>
         </div>
 
@@ -162,12 +160,24 @@
         let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || [];
         let currentQuizWord = null;
 
+        // 【新創功能】用來記錄隨機翻卡的歷史軌跡，方便「上一個」按鈕往回退
+        let cardHistory = [];
+        let historyPointer = -1;
+
         // 頁面初始化：讀取外部 JSON
         async function loadWords() {
             try {
                 const response = await fetch('words.json');
                 wordDatabase = await response.json();
                 updateFavCount();
+                
+                // 初始化隨機出第一張牌
+                if (wordDatabase.length > 0) {
+                    currentIndex = Math.floor(Math.random() * wordDatabase.length);
+                    cardHistory.push(currentIndex);
+                    historyPointer = 0;
+                }
+                
                 updateCard();
             } catch (error) {
                 document.getElementById('card-front-text').innerText = "無法載入單字庫，請確認 JSON 檔案是否存在。";
@@ -189,31 +199,25 @@
             if(panelId === 'fav-panel') renderFavorites();
         }
 
-        // --- 發音核心功能 (優化語音速度) ---
+        // --- 發音核心功能 ---
         function speakWord(text, isSentence = false) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // 停止上一個正在播放的聲音
+                window.speechSynthesis.cancel(); 
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                
-                // 如果是句子，速度稍微放慢一點（0.85），方便聽清楚句子的組成
                 utterance.rate = isSentence ? 0.85 : 0.9; 
                 window.speechSynthesis.speak(utterance);
             }
         }
         
-        // 🔊 朗讀目前單字
         function speakCurrentWord(e) {
-            e.stopPropagation(); // 阻止觸發翻卡
+            e.stopPropagation(); 
             if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en, false);
         }
 
-        // 🔊 朗讀目前例句 (新功能)
         function speakCurrentExample(e) {
-            e.stopPropagation(); // 重要：阻止事件向上傳遞，避免點例句時卡片翻回去正面
-            if(wordDatabase[currentIndex]) {
-                speakWord(wordDatabase[currentIndex].ex, true);
-            }
+            e.stopPropagation(); 
+            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].ex, true);
         }
 
         // --- 錯題本邏輯 ---
@@ -221,8 +225,66 @@
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
+        // --- 單字卡邏輯 (已優化為隨機洗牌流) ---
+        function updateCard() {
+            if(wordDatabase.length === 0) return;
+            const word = wordDatabase[currentIndex];
+            
+            document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
+            document.getElementById('card-ch').innerText = word.ch;
+            document.getElementById('card-ex').innerText = `例句：${word.ex}`;
+            
+            const isFav = favorites.some(item => item.id === word.id);
+            document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
+            
+            document.getElementById('card-front-text').style.display = 'block';
+            document.getElementById('card-back-area').style.display = 'none';
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            const front = document.getElementById('card-front-text');
+            const back = document.getElementById('card-back-area');
+            
+            if(isFlipped) {
+                front.style.display = 'block';
+                back.style.display = 'none';
+            } else {
+                front.style.display = 'none';
+                back.style.display = 'block';
+                speakWord(wordDatabase[currentIndex].en, false);
+            }
+            isFlipped = !isFlipped;
+        }
+
+        // 按「下一個」：隨機抽取下一個
+        function nextWord() { 
+            if (wordDatabase.length === 0) return;
+
+            // 如果使用者之前有按過「上一個」，往後走時優先消耗歷史紀錄
+            if (historyPointer < cardHistory.length - 1) {
+                historyPointer++;
+                currentIndex = cardHistory[historyPointer];
+            } else {
+                // 否則，重新隨機抽一個索引
+                currentIndex = Math.floor(Math.random() * wordDatabase.length);
+                cardHistory.push(currentIndex);
+                historyPointer++;
+            }
+            updateCard(); 
+        }
+
+        // 按「上一個」：循著軌跡回退
+        function prevWord() { 
+            if (historyPointer > 0) {
+                historyPointer--;
+                currentIndex = cardHistory[historyPointer];
+                updateCard();
+            }
+        }
+
         function toggleFavorite(e) {
-            e.stopPropagation(); // 阻止觸發翻卡
+            e.stopPropagation(); 
             const currentWord = wordDatabase[currentIndex];
             const favIndex = favorites.findIndex(item => item.id === currentWord.id);
             
@@ -267,44 +329,6 @@
                 updateCard();
             }
         }
-
-        // --- 單字卡邏輯 ---
-        function updateCard() {
-            if(wordDatabase.length === 0) return;
-            const word = wordDatabase[currentIndex];
-            
-            // 寫入正面與背面的內容
-            document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
-            document.getElementById('card-ch').innerText = word.ch;
-            document.getElementById('card-ex').innerText = `例句：${word.ex}`;
-            
-            // 更新愛心
-            const isFav = favorites.some(item => item.id === word.id);
-            document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
-            
-            // 重設為顯示正面
-            document.getElementById('card-front-text').style.display = 'block';
-            document.getElementById('card-back-area').style.display = 'none';
-            isFlipped = false;
-        }
-
-        function flipCard() {
-            const front = document.getElementById('card-front-text');
-            const back = document.getElementById('card-back-area');
-            
-            if(isFlipped) {
-                front.style.display = 'block';
-                back.style.display = 'none';
-            } else {
-                front.style.display = 'none';
-                back.style.display = 'block';
-                speakWord(wordDatabase[currentIndex].en, false); // 翻面時自動發音單字
-            }
-            isFlipped = !isFlipped;
-        }
-
-        function nextWord() { currentIndex = (currentIndex + 1) % wordDatabase.length; updateCard(); }
-        function prevWord() { currentIndex = (currentIndex - 1 + wordDatabase.length) % wordDatabase.length; updateCard(); }
 
         // --- 測驗邏輯 ---
         function initQuiz() {
