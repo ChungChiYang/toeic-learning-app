@@ -22,7 +22,7 @@
             align-items: center;
         }
 
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
         .tab-btn {
             padding: 10px 20px; border: none; background-color: #e2e8f0;
             color: #4a5568; border-radius: 20px; cursor: pointer; font-weight: bold;
@@ -38,24 +38,40 @@
         .panel { display: none; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .panel.active { display: flex; }
 
-        /* 單字卡 */
+        /* 單字卡外框 */
         .flashcard {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white; min-height: 220px; border-radius: 12px;
+            color: white; min-height: 250px; border-radius: 12px;
             display: flex; flex-direction: column; justify-content: center;
             align-items: center; cursor: pointer; text-align: center;
-            padding: 25px; box-sizing: border-box; position: relative;
+            padding: 35px 25px 25px 25px; box-sizing: border-box; position: relative;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
-        /* 按鈕樣式 */
+        /* 功能按鈕 */
         .audio-btn, .fav-btn {
-            position: absolute; background: rgba(25px,25px,25px,0.2); border: none;
-            color: white; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%;
-            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
+            position: absolute; background: rgba(255,255,255,0.2); border: none;
+            color: white; font-size: 1.3rem; cursor: pointer; padding: 0; border-radius: 50%;
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+            z-index: 10;
         }
+        .audio-btn:hover, .fav-btn:hover { background: rgba(255,255,255,0.4); }
         .audio-btn { top: 15px; left: 15px; }
-        .fav-btn { top: 15px; right: 15px; background: none; font-size: 2rem;}
-        .fav-btn.active { color: #f43f5e; text-shadow: 0 0 10px rgba(244,63,94,0.5); }
+        .fav-btn { top: 15px; right: 15px; background: rgba(255,255,255,0.1); font-size: 1.6rem;}
+
+        /* 卡片內文字樣式 */
+        #card-front-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; margin: 0; }
+        #card-back-area { width: 100%; text-align: center; }
+        .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 12px 0; color: #fff; }
+        .word-ex { font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; text-align: left; word-break: break-word;}
+        .click-hint { position: absolute; bottom: 10px; font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.4; }
+        }
 
         /* 測驗 */
         .quiz-word { font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #1e293b; }
@@ -63,12 +79,14 @@
         .option-btn {
             padding: 14px; border: 2px solid #e2e8f0; background: white;
             border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left;
+            font-weight: 500; color: #334155;
         }
         
-        .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; }
+        .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
         .action-btn {
-            padding: 10px 20px; border: none; background-color: var(--secondary-color);
-            color: white; border-radius: 8px; cursor: pointer; font-weight: bold;
+            padding: 12px 24px; border: none; background-color: var(--secondary-color);
+            color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1;
+            text-align: center;
         }
         #feedback { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
     </style>
@@ -76,7 +94,8 @@
 <body>
 
     <header style="text-align: center; margin-bottom: 20px;">
-        <h2>TOEIC 多益單字特訓王</h2>
+        <h2 style="color: #1e293b; margin-bottom: 5px;">TOEIC 多益單字特訓王</h2>
+        <p style="color: #64748b; margin: 0; font-size: 0.9rem;">點擊單字卡片即可翻面看中文解答</p>
     </header>
 
     <div class="nav-tabs">
@@ -89,15 +108,19 @@
         <div id="card-panel" class="panel active">
             <div class="flashcard" onclick="flipCard()">
                 <button class="audio-btn" onclick="speakCurrentWord(event)">🔊</button>
-                <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">➔</button>
-                <h2 id="card-front">載入中...</h2>
-                <div id="card-back" style="display:none;">
-                    <p id="card-ch" style="font-size: 1.4rem; font-weight: bold; margin: 0 0 10px 0;"></p>
-                    <p id="card-ex" style="font-size: 0.95rem; opacity: 0.9; line-height: 1.4;"></p>
+                <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">🤍</button>
+                
+                <h2 id="card-front-text">載入中...</h2>
+                
+                <div id="card-back-area" style="display:none;">
+                    <p class="word-ch" id="card-ch"></p>
+                    <p class="word-ex" id="card-ex"></p>
                 </div>
+
+                <span class="click-hint">點擊卡片翻面</span>
             </div>
             <div class="ctrl-btns">
-                <button class="action-btn" onclick="prevWord()">上一個</button>
+                <button class="action-btn" style="background-color: #64748b;" onclick="prevWord()">上一個</button>
                 <button class="action-btn" onclick="nextWord()">下一個</button>
             </div>
         </div>
@@ -114,7 +137,7 @@
         <div id="fav-panel" class="panel">
             <div id="fav-list-container" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
                 </div>
-            <button class="action-btn" style="background-color: #ef4444;" onclick="clearAllFavorites()">清空錯題本</button>
+            <button class="action-btn" style="background-color: #ef4444; flex-grow: 0;" onclick="clearAllFavorites()">清空錯題本</button>
         </div>
     </div>
 
@@ -122,7 +145,7 @@
         let wordDatabase = [];
         let currentIndex = 0;
         let isFlipped = false;
-        let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || []; // 從本地讀取紀錄
+        let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || [];
         let currentQuizWord = null;
 
         // 頁面初始化：讀取外部 JSON
@@ -133,7 +156,7 @@
                 updateFavCount();
                 updateCard();
             } catch (error) {
-                document.getElementById('card-front').innerText = "無法載入單字庫，請確認是否有使用伺服器環境開啟網頁。";
+                document.getElementById('card-front-text').innerText = "無法載入單字庫，請確認 JSON 檔案是否存在。";
                 console.error("Error loading JSON:", error);
             }
         }
@@ -143,41 +166,44 @@
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
-            event.target.classList.add('active');
+            
+            if(event && event.target) {
+                event.target.classList.add('active');
+            }
 
             if(panelId === 'quiz-panel') initQuiz();
             if(panelId === 'fav-panel') renderFavorites();
         }
 
-        // --- 發音功能 (Web Speech API) ---
+        // --- 發音功能 ---
         function speakWord(text) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); // 先停止之前的發音
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US'; // 設定美式英文
-                utterance.rate = 0.9;     // 速度稍慢一點方便聽清楚
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
                 window.speechSynthesis.speak(utterance);
             }
         }
         function speakCurrentWord(e) {
-            e.stopPropagation(); // 防止觸發翻卡事件
+            e.stopPropagation(); // 阻止觸發翻卡
             if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en);
         }
 
-        // --- 錯題本/收藏夾邏輯 (LocalStorage) ---
+        // --- 錯題本邏輯 ---
         function updateFavCount() {
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
         function toggleFavorite(e) {
-            e.stopPropagation(); // 防止翻卡
+            e.stopPropagation(); // 阻止觸發翻卡
             const currentWord = wordDatabase[currentIndex];
             const favIndex = favorites.findIndex(item => item.id === currentWord.id);
             
             if (favIndex > -1) {
-                favorites.splice(favIndex, 1); // 已存在就移除
+                favorites.splice(favIndex, 1);
             } else {
-                favorites.push(currentWord);   // 不存在就加入
+                favorites.push(currentWord);
             }
             
             localStorage.setItem('toeic_favs', JSON.stringify(favorites));
@@ -189,7 +215,7 @@
             const container = document.getElementById('fav-list-container');
             container.innerHTML = "";
             if(favorites.length === 0) {
-                container.innerHTML = "<p style='color:#718096; text-align:center;'>目前錯題本空空如也！</p>";
+                container.innerHTML = "<p style='color:#718096; text-align:center; padding: 20px;'>目前錯題本空空如也！</p>";
                 return;
             }
             favorites.forEach(word => {
@@ -200,11 +226,17 @@
                         <strong style="color:var(--primary-color); font-size:1.1rem;">${word.en}</strong> (${word.pos})<br>
                         <span style="color:#4a5568;">${word.ch}</span>
                     </div>
-                    <button class="action-btn" style="padding:5px 10px; background-color:#718096;" onclick="speakWord('${word.en}')">🔊</button>
+                    <button class="action-btn" style="padding:5px 10px; background-color:#718096; flex-grow:0;" onclick="speakWord('${word.en}')">🔊</button>
                 `;
                 container.appendChild(div);
             });
         }
+
+        document.addEventListener('click', function(e){
+            if(e.target && e.target.classList.contains('tab-btn')){
+               // 用於確保動態點擊能正確切換樣式
+            }
+        });
 
         function clearAllFavorites() {
             if(confirm("確定要清空所有錯題紀錄嗎？")) {
@@ -220,27 +252,33 @@
         function updateCard() {
             if(wordDatabase.length === 0) return;
             const word = wordDatabase[currentIndex];
-            document.getElementById('card-front').innerText = `${word.en} (${word.pos})`;
-            document.getElementById('card-ch').innerText = word.ch;
-            document.getElementById('card-ex').innerText = `Ex: ${word.ex}`;
             
-            // 更新愛心狀態
+            // 寫入正面與背面的內容
+            document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
+            document.getElementById('card-ch').innerText = word.ch;
+            document.getElementById('card-ex').innerText = `例句：${word.ex}`;
+            
+            // 更新愛心
             const isFav = favorites.some(item => item.id === word.id);
             document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
             
-            document.getElementById('card-back').style.display = 'none';
-            document.getElementById('card-front').style.style = 'block';
+            // 重設為顯示正面
+            document.getElementById('card-front-text').style.display = 'block';
+            document.getElementById('card-back-area').style.display = 'none';
             isFlipped = false;
         }
 
         function flipCard() {
+            const front = document.getElementById('card-front-text');
+            const back = document.getElementById('card-back-area');
+            
             if(isFlipped) {
-                document.getElementById('card-front').style.display = 'block';
-                document.getElementById('card-back').style.display = 'none';
+                front.style.display = 'block';
+                back.style.display = 'none';
             } else {
-                document.getElementById('card-front').style.display = 'none';
-                document.getElementById('card-back').style.display = 'block';
-                speakWord(wordDatabase[currentIndex].en); // 翻轉時也自動發音，加深印象
+                front.style.display = 'none';
+                back.style.display = 'block';
+                speakWord(wordDatabase[currentIndex].en); // 翻面時自動發音
             }
             isFlipped = !isFlipped;
         }
@@ -253,10 +291,9 @@
             if(wordDatabase.length === 0) return;
             document.getElementById('feedback').innerText = "";
             
-            // 隨機選題
             currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
-            speakWord(currentQuizWord.en); // 題目出來時自動發音
+            speakWord(currentQuizWord.en);
 
             let choices = [currentQuizWord.ch];
             while(choices.length < Math.min(4, wordDatabase.length)) {
@@ -289,7 +326,6 @@
                 btn.style.backgroundColor = "#fee2e2";
                 btn.style.borderColor = "#ef4444";
                 
-                // 答錯自動加入 LocalStorage 錯題本
                 if (!favorites.some(item => item.id === currentQuizWord.id)) {
                     favorites.push(currentQuizWord);
                     localStorage.setItem('toeic_favs', JSON.stringify(favorites));
@@ -298,7 +334,7 @@
             }
         }
 
-        // 啟動程式
+        // 啟動
         loadWords();
     </script>
 </body>
