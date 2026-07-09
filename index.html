@@ -38,19 +38,19 @@
         .panel { display: none; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .panel.active { display: flex; }
 
-        /* 單字卡外框：加大高度，確保所有按鈕展開時不擁擠 */
+        /* 單字卡外框 */
         .flashcard {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white; 
-            min-height: 320px; 
+            min-height: 350px; 
             border-radius: 12px;
             display: flex; 
             flex-direction: column; 
-            justify-content: space-between; /* 均勻分配頂部、中部和底部的空間 */
+            justify-content: space-between; 
             align-items: center; 
             cursor: pointer; 
             text-align: center;
-            padding: 40px 25px 20px 25px; 
+            padding: 50px 25px 20px 25px; /* 加大上方 padding，完美避開按鈕 */
             box-sizing: border-box; 
             position: relative;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
@@ -78,9 +78,10 @@
             width: 100%;
         }
 
-        /* 卡片內文字樣式 */
+        /* 卡片內文字與排版優化 */
         #card-front-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; margin: 0; }
         #card-back-area { width: 100%; text-align: center; }
+        .word-back-en { font-size: 1.8rem; font-weight: bold; letter-spacing: 0.5px; margin: 0 0 4px 0; color: rgba(255, 255, 255, 0.85); }
         .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 14px 0; color: #fff; }
         
         .word-ex { 
@@ -120,13 +121,8 @@
         }
         .dict-btn:hover { background: #f1f5f9; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
-        /* 底部提示文字：增加 margin-top 完美推開，不再緊貼上方 */
         .click-hint { 
-            font-size: 0.8rem; 
-            opacity: 0.6; 
-            animation: pulse 2s infinite; 
-            margin-top: 20px; 
-            user-select: none;
+            font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; margin-top: 20px; user-select: none;
         }
 
         @keyframes pulse {
@@ -142,6 +138,19 @@
             padding: 14px; border: 2px solid #e2e8f0; background: white;
             border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left;
             font-weight: 500; color: #334155;
+        }
+
+        /* 測驗下的查看例句提示功能 */
+        .quiz-hint-btn {
+            background: none; border: 1px dashed #94a3b8; color: #64748b;
+            padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
+            margin-top: 15px; font-weight: 500; transition: all 0.2s; align-self: center;
+        }
+        .quiz-hint-btn:hover { background: #f1f5f9; color: var(--primary-color); border-color: var(--primary-color); }
+        .quiz-hint-box {
+            display: none; background: #f8fafc; border-left: 3px solid #94a3b8;
+            padding: 12px; border-radius: 6px; font-size: 0.95rem; color: #334155;
+            margin-top: 10px; line-height: 1.4; text-align: left;
         }
         
         .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
@@ -173,10 +182,14 @@
                 <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">🤍</button>
                 
                 <div class="card-main-content">
+                    <!-- 正面英文 -->
                     <h2 id="card-front-text">載入中...</h2>
                     
+                    <!-- 背面區域：調整為第一行顯示單字，第二行顯示中文 -->
                     <div id="card-back-area" style="display:none;">
+                        <div class="word-back-en" id="card-back-en"></div>
                         <p class="word-ch" id="card-ch"></p>
+                        
                         <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
                             <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
                             <span id="card-ex"></span>
@@ -208,6 +221,11 @@
             <div class="quiz-word" id="quiz-question">Question</div>
             <div class="options-grid" id="quiz-options"></div>
             <div id="feedback"></div>
+            
+            <!-- 【新功能】測驗中的例句提示按鈕 -->
+            <button class="quiz-hint-btn" onclick="toggleQuizHint()">💡 查看提示例句</button>
+            <div class="quiz-hint-box" id="quiz-hint-box"></div>
+
             <div class="ctrl-btns" style="justify-content: flex-end;">
                 <button class="action-btn" onclick="initQuiz()">下一題</button>
             </div>
@@ -345,6 +363,9 @@
             const word = wordDatabase[currentIndex];
             
             document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
+            
+            // 背面資料同步填入
+            document.getElementById('card-back-en').innerText = `${word.en} (${word.pos})`;
             document.getElementById('card-ch').innerText = word.ch;
             document.getElementById('card-ex').innerText = `例句：${word.ex}`;
             
@@ -446,9 +467,18 @@
         function initQuiz() {
             if(wordDatabase.length === 0) return;
             document.getElementById('feedback').innerText = "";
+            
+            // 隱藏上一次的例句提示
+            const hintBox = document.getElementById('quiz-hint-box');
+            hintBox.style.display = 'none';
+            hintBox.innerText = "";
+            
             currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
             speakWord(currentQuizWord.en, false);
+
+            // 準備提示例句內容
+            hintBox.innerText = `📝 例句提示：\n${currentQuizWord.ex}`;
 
             let choices = [currentQuizWord.ch];
             while(choices.length < Math.min(4, wordDatabase.length)) {
@@ -466,6 +496,16 @@
                 btn.onclick = () => checkAnswer(btn, choice);
                 optionsGrid.appendChild(btn);
             });
+        }
+
+        // 控制測驗中的例句提示展開
+        function toggleQuizHint() {
+            const hintBox = document.getElementById('quiz-hint-box');
+            if (hintBox.style.display === 'block') {
+                hintBox.style.display = 'none';
+            } else {
+                hintBox.style.display = 'block';
+            }
         }
 
         function checkAnswer(btn, choice) {
