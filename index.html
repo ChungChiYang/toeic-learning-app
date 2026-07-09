@@ -30,7 +30,7 @@
         .tab-btn.active { background-color: var(--primary-color); color: white; }
 
         .container {
-            width: 100%; max-width: 500px; min-height: 400px; background: white;
+            width: 100%; max-width: 500px; min-height: 420px; background: white;
             padding: 30px; border-radius: 16px; box-shadow: var(--card-shadow);
             box-sizing: border-box; display: flex; flex-direction: column;
         }
@@ -38,13 +38,21 @@
         .panel { display: none; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .panel.active { display: flex; }
 
-        /* 單字卡外框 */
+        /* 單字卡外框：加大高度，確保所有按鈕展開時不擁擠 */
         .flashcard {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white; min-height: 250px; border-radius: 12px;
-            display: flex; flex-direction: column; justify-content: center;
-            align-items: center; cursor: pointer; text-align: center;
-            padding: 35px 25px 25px 25px; box-sizing: border-box; position: relative;
+            color: white; 
+            min-height: 320px; 
+            border-radius: 12px;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; /* 均勻分配頂部、中部和底部的空間 */
+            align-items: center; 
+            cursor: pointer; 
+            text-align: center;
+            padding: 40px 25px 20px 25px; 
+            box-sizing: border-box; 
+            position: relative;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
@@ -60,10 +68,20 @@
         .audio-btn { top: 15px; left: 15px; }
         .fav-btn { top: 15px; right: 15px; background: rgba(255,255,255,0.1); font-size: 1.6rem;}
 
+        /* 卡片內中央區域 */
+        .card-main-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            width: 100%;
+        }
+
         /* 卡片內文字樣式 */
         #card-front-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; margin: 0; }
         #card-back-area { width: 100%; text-align: center; }
-        .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 12px 0; color: #fff; }
+        .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 14px 0; color: #fff; }
         
         .word-ex { 
             font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; 
@@ -76,7 +94,7 @@
 
         /* 翻譯按鈕與外框 */
         .translation-toggle {
-            background: rgba(255, 255, 255, 0.2); margin-top: 12px; padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.2); margin-top: 14px; padding: 6px 14px;
             border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
             display: inline-block; transition: background 0.2s;
         }
@@ -88,21 +106,28 @@
             font-size: 0.9rem; line-height: 1.4; border-left: 3px solid var(--secondary-color);
         }
 
-        /* 【新進樣式】字典按鈕區塊 */
+        /* 字典按鈕區塊 */
         .dict-section {
-            margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.3);
-            text-align: center;
+            margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.3);
+            text-align: center; width: 100%;
         }
-        .dict-title { font-size: 0.75rem; opacity: 0.7; margin-bottom: 6px; font-weight: bold; letter-spacing: 0.5px;}
-        .dict-btn-group { display: flex; gap: 8px; justify-content: center; }
+        .dict-title { font-size: 0.75rem; opacity: 0.7; margin-bottom: 8px; font-weight: bold; letter-spacing: 0.5px;}
+        .dict-btn-group { display: flex; gap: 10px; justify-content: center; }
         .dict-btn {
-            background: rgba(255, 255, 255, 0.9); color: #4f46e5; border: none;
-            padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;
+            background: #ffffff; color: #4f46e5; border: none;
+            padding: 6px 14px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;
             cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .dict-btn:hover { background: #ffffff; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
+        .dict-btn:hover { background: #f1f5f9; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
-        .click-hint { position: absolute; bottom: 10px; font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; }
+        /* 底部提示文字：增加 margin-top 完美推開，不再緊貼上方 */
+        .click-hint { 
+            font-size: 0.8rem; 
+            opacity: 0.6; 
+            animation: pulse 2s infinite; 
+            margin-top: 20px; 
+            user-select: none;
+        }
 
         @keyframes pulse {
             0% { opacity: 0.4; }
@@ -147,29 +172,32 @@
                 <button class="audio-btn" onclick="speakCurrentWord(event)">🔊</button>
                 <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">🤍</button>
                 
-                <h2 id="card-front-text">載入中...</h2>
-                
-                <div id="card-back-area" style="display:none;">
-                    <p class="word-ch" id="card-ch"></p>
-                    <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
-                        <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
-                        <span id="card-ex"></span>
-                    </div>
+                <div class="card-main-content">
+                    <h2 id="card-front-text">載入中...</h2>
                     
-                    <div class="translation-toggle" onclick="toggleTranslation(event)">👁️ 顯示例句翻譯</div>
-                    <div class="translation-box" id="card-translation" onclick="event.stopPropagation()"></div>
+                    <div id="card-back-area" style="display:none;">
+                        <p class="word-ch" id="card-ch"></p>
+                        <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
+                            <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
+                            <span id="card-ex"></span>
+                        </div>
+                        
+                        <div class="translation-toggle" onclick="toggleTranslation(event)">👁️ 顯示例句翻譯</div>
+                        <div class="translation-box" id="card-translation" onclick="event.stopPropagation()"></div>
 
-                    <div class="dict-section" onclick="event.stopPropagation()">
-                        <div class="dict-title">📖 延伸學商務英文：權威字典即時查</div>
-                        <div class="dict-btn-group">
-                            <button class="dict-btn" onclick="openDictionary('cambridge')">Cambridge 劍橋</button>
-                            <button class="dict-btn" onclick="openDictionary('webster')">Webster 韋氏</button>
+                        <div class="dict-section" onclick="event.stopPropagation()">
+                            <div class="dict-title">📖 延伸學商務英文：權威字典即時查</div>
+                            <div class="dict-btn-group">
+                                <button class="dict-btn" onclick="openDictionary('cambridge')">Cambridge 劍橋</button>
+                                <button class="dict-btn" onclick="openDictionary('webster')">Webster 韋氏</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <span class="click-hint">點擊卡片翻面</span>
             </div>
+            
             <div class="ctrl-btns">
                 <button class="action-btn" style="background-color: #64748b;" onclick="prevWord()">上一個</button>
                 <button class="action-btn" onclick="nextWord()">下一個 (隨機)</button>
@@ -294,24 +322,20 @@
             }
         }
 
-        // --- 【核心升級】彈出字典視窗控制 ---
+        // --- 彈出字典視窗控制 ---
         function openDictionary(type) {
             if (wordDatabase.length === 0) return;
             const currentWord = wordDatabase[currentIndex];
-            // 清理單字字串，只留下純英文字母（避免多益 json 裡有奇怪的空格或特殊符號）
             const cleanWord = currentWord.en.trim().toLowerCase().replace(/[^a-z-]/g, '');
             
             let targetUrl = "";
             if (type === 'cambridge') {
-                // 帶入劍橋英漢/英英查詢接口
                 targetUrl = `https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/${cleanWord}`;
             } else if (type === 'webster') {
-                // 帶入美式最高權威韋氏英英接口
                 targetUrl = `https://www.merriam-webster.com/dictionary/${cleanWord}`;
             }
             
-            // 彈出一個精美、不干擾主畫面的獨立小視窗 (符合辦公室低調使用)
-            const windowFeatures = "width=520,height=650,top=100,left=100,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no";
+            const windowFeatures = "width=540,height=650,top=120,left=120,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no";
             window.open(targetUrl, "ToeicDictWindow", windowFeatures);
         }
 
