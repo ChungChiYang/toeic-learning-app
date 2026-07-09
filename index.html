@@ -64,7 +64,17 @@
         #card-front-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; margin: 0; }
         #card-back-area { width: 100%; text-align: center; }
         .word-ch { font-size: 1.6rem; font-weight: bold; margin: 0 0 12px 0; color: #fff; }
-        .word-ex { font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; text-align: left; word-break: break-word;}
+        
+        /* 讓例句區塊看起來可以點擊，並增加提示感 */
+        .word-ex { 
+            font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; 
+            background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; 
+            text-align: left; word-break: break-word; cursor: pointer;
+            transition: background 0.2s; position: relative;
+        }
+        .word-ex:hover { background: rgba(0,0,0,0.25); }
+        .ex-hint { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 4px; text-align: right; }
+
         .click-hint { position: absolute; bottom: 10px; font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; }
 
         @keyframes pulse {
@@ -114,7 +124,11 @@
                 
                 <div id="card-back-area" style="display:none;">
                     <p class="word-ch" id="card-ch"></p>
-                    <p class="word-ex" id="card-ex"></p>
+                    <!-- 修改這裡：加入點擊朗讀例句功能，並阻止事件冒泡防止點例句時又把卡片翻回去 -->
+                    <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
+                        <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
+                        <span id="card-ex"></span>
+                    </div>
                 </div>
 
                 <span class="click-hint">點擊卡片翻面</span>
@@ -175,19 +189,31 @@
             if(panelId === 'fav-panel') renderFavorites();
         }
 
-        // --- 發音功能 ---
-        function speakWord(text) {
+        // --- 發音核心功能 (優化語音速度) ---
+        function speakWord(text, isSentence = false) {
             if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
+                window.speechSynthesis.cancel(); // 停止上一個正在播放的聲音
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
-                utterance.rate = 0.9;
+                
+                // 如果是句子，速度稍微放慢一點（0.85），方便聽清楚句子的組成
+                utterance.rate = isSentence ? 0.85 : 0.9; 
                 window.speechSynthesis.speak(utterance);
             }
         }
+        
+        // 🔊 朗讀目前單字
         function speakCurrentWord(e) {
             e.stopPropagation(); // 阻止觸發翻卡
-            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en);
+            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en, false);
+        }
+
+        // 🔊 朗讀目前例句 (新功能)
+        function speakCurrentExample(e) {
+            e.stopPropagation(); // 重要：阻止事件向上傳遞，避免點例句時卡片翻回去正面
+            if(wordDatabase[currentIndex]) {
+                speakWord(wordDatabase[currentIndex].ex, true);
+            }
         }
 
         // --- 錯題本邏輯 ---
@@ -226,17 +252,11 @@
                         <strong style="color:var(--primary-color); font-size:1.1rem;">${word.en}</strong> (${word.pos})<br>
                         <span style="color:#4a5568;">${word.ch}</span>
                     </div>
-                    <button class="action-btn" style="padding:5px 10px; background-color:#718096; flex-grow:0;" onclick="speakWord('${word.en}')">🔊</button>
+                    <button class="action-btn" style="padding:5px 10px; background-color:#718096; flex-grow:0;" onclick="speakWord('${word.en}', false)">🔊</button>
                 `;
                 container.appendChild(div);
             });
         }
-
-        document.addEventListener('click', function(e){
-            if(e.target && e.target.classList.contains('tab-btn')){
-               // 用於確保動態點擊能正確切換樣式
-            }
-        });
 
         function clearAllFavorites() {
             if(confirm("確定要清空所有錯題紀錄嗎？")) {
@@ -278,7 +298,7 @@
             } else {
                 front.style.display = 'none';
                 back.style.display = 'block';
-                speakWord(wordDatabase[currentIndex].en); // 翻面時自動發音
+                speakWord(wordDatabase[currentIndex].en, false); // 翻面時自動發音單字
             }
             isFlipped = !isFlipped;
         }
@@ -293,7 +313,7 @@
             
             currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
-            speakWord(currentQuizWord.en);
+            speakWord(currentQuizWord.en, false);
 
             let choices = [currentQuizWord.ch];
             while(choices.length < Math.min(4, wordDatabase.length)) {
