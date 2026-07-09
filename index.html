@@ -41,7 +41,7 @@
         /* 單字卡外框 */
         .flashcard {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-            color: white; min-height: 280px; border-radius: 12px;
+            color: white; min-height: 250px; border-radius: 12px;
             display: flex; flex-direction: column; justify-content: center;
             align-items: center; cursor: pointer; text-align: center;
             padding: 35px 25px 25px 25px; box-sizing: border-box; position: relative;
@@ -74,26 +74,19 @@
         .word-ex:hover { background: rgba(0,0,0,0.25); }
         .ex-hint { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 4px; text-align: right; }
 
-        /* 【新進文法區塊】 */
-        .grammar-toggle {
-            background: rgba(255, 255, 255, 0.2); margin-top: 10px; padding: 6px 12px;
+        /* 【新進功能】翻譯開關按鈕與外框樣式 */
+        .translation-toggle {
+            background: rgba(255, 255, 255, 0.2); margin-top: 12px; padding: 6px 14px;
             border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
             display: inline-block; transition: background 0.2s;
         }
-        .grammar-toggle:hover { background: rgba(255, 255, 255, 0.35); }
+        .translation-toggle:hover { background: rgba(255, 255, 255, 0.35); }
         
-        .grammar-box {
-            display: none; background: rgba(255, 255, 255, 0.95); color: #1e293b;
-            margin-top: 10px; padding: 12px; border-radius: 8px; text-align: left;
-            font-size: 0.9rem; line-height: 1.5; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        .translation-box {
+            display: none; background: rgba(0, 0, 0, 0.2); color: #ffffff;
+            margin-top: 10px; padding: 10px 12px; border-radius: 8px; text-align: left;
+            font-size: 0.9rem; line-height: 1.4; border-left: 3px solid var(--secondary-color);
         }
-        .grammar-tag {
-            display: inline-block; padding: 2px 6px; font-size: 0.75rem; 
-            font-weight: bold; border-radius: 4px; margin-right: 4px; color: white;
-        }
-        .tag-s { background-color: #3b82f6; } /* 主詞藍 */
-        .tag-v { background-color: #ef4444; } /* 動詞紅 */
-        .tag-target { background-color: #10b981; } /* 目標單字綠 */
 
         .click-hint { position: absolute; bottom: 10px; font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; }
 
@@ -149,9 +142,8 @@
                         <span id="card-ex"></span>
                     </div>
                     
-                    <!-- 【新創功能】文法解析抽屜 -->
-                    <div class="grammar-toggle" onclick="toggleGrammar(event)">🔍 查看句型文法結構</div>
-                    <div class="grammar-box" id="card-grammar" onclick="event.stopPropagation()"></div>
+                    <div class="translation-toggle" onclick="toggleTranslation(event)">👁️ 顯示例句翻譯</div>
+                    <div class="translation-box" id="card-translation" onclick="event.stopPropagation()"></div>
                 </div>
 
                 <span class="click-hint">點擊卡片翻面</span>
@@ -187,7 +179,7 @@
 
         let cardHistory = [];
         let historyPointer = -1;
-        let isGrammarOpen = false; // 追蹤文法視窗是否打開
+        let isTranslationOpen = false; // 追蹤翻譯區塊是否開啟
 
         // 頁面初始化：讀取外部 JSON
         async function loadWords() {
@@ -249,77 +241,18 @@
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
-        // --- 【新創核心】前端動態文法解析器 ---
-        function generateGrammarAnalysis(word) {
-            const sentence = word.ex;
-            const targetWord = word.en.toLowerCase();
-            
-            // 簡單的主詞與動詞偵測演算法（多益商務句型常見架構）
-            let detectedSubject = "The company / The manager";
-            let detectedVerb = "is / implemented";
-            
-            const wordsArr = sentence.split(' ');
-            if(wordsArr.length > 0) {
-                detectedSubject = wordsArr[0].replace(/[^a-zA-Z]/g, '');
-                if(["The", "A", "An", "This", "Our"].includes(detectedSubject) && wordsArr[1]) {
-                    detectedSubject += " " + wordsArr[1].replace(/[^a-zA-Z]/g, '');
-                }
-            }
-            
-            // 依據多益常見詞性（pos）給予考點建議
-            let考點提示 = "";
-            let詞性中文 = "";
-            
-            switch(word.pos.toLowerCase()) {
-                case 'v.': case 'v': case '動詞':
-                    詞性中文 = "動詞";
-                    考點提示 = `多益常考<strong>「動詞時態」</strong>與單複數主詞一致性。注意這句話中的動詞形式。若置於助動詞後需用原形。`;
-                    break;
-                case 'n.': case 'n': case '名詞':
-                    詞性中文 = "名詞";
-                    考點提示 = `多益 Part 5 必考<strong>「格位修飾」</strong>！名詞前方常有形容詞修飾，或置於介系詞後面作為受詞。`;
-                    break;
-                case 'adj.': case 'adj': case '形容詞':
-                    詞性中文 = "形容詞";
-                    考點提示 = `形容詞用來<strong>「修飾名詞」</strong>，通常放在名詞前面，或是連綴動詞（如 be 動詞、remain）的後面作為補語。`;
-                    break;
-                case 'adv.': case 'adv': case '副詞':
-                    詞性中文 = "副詞";
-                    考點提示 = `副詞修飾極廣（修飾動詞、形容詞或全句）。在多益中，若看到<strong>「S + V + [空格] + O」</strong>或句子結構完整，空格十之八九填副詞！`;
-                    break;
-                default:
-                    詞性中文 = "核心詞彙";
-                    考點提示 = `分析此句的主主結構，多益閱讀題極度重視找出「真正的主詞與主要動詞」，以便快速略過修飾語。`;
-            }
-
-            // 組裝華麗的文法分析 HTML
-            let html = `
-                <div style="margin-bottom: 8px;">
-                    <span class="grammar-tag tag-target">${詞性中文}定位</span> <strong>${word.en}</strong> 在本句中扮演關鍵核心。
-                </div>
-                <div style="margin-bottom: 8px; border-left: 3px solid #3b82f6; padding-left:8px; font-size:0.85rem; color:#475569;">
-                    <span style="color:#3b82f6; font-weight:bold;">[主句骨架拆解]</span><br>
-                    • 概略主詞 (S)：<span style="color:#2563eb; font-weight:bold;">${detectedSubject}</span><br>
-                    • 觀察核心單字前後的修飾關係，有助於多益 Part 5 填空秒殺。
-                </div>
-                <div style="font-size: 0.85rem; background: #f1f5f9; padding: 6px 10px; border-radius: 4px; color: #334155;">
-                    💡 <strong>多益文法考點：</strong>${考點提示}
-                </div>
-            `;
-            return html;
-        }
-
-        // 切換文法顯示
-        function toggleGrammar(e) {
+        // --- 【新進核心】切換顯示例句翻譯功能 ---
+        function toggleTranslation(e) {
             e.stopPropagation(); // 阻止卡片翻回去
-            const box = document.getElementById('card-grammar');
-            isGrammarOpen = !isGrammarOpen;
-            if(isGrammarOpen) {
+            const box = document.getElementById('card-translation');
+            isTranslationOpen = !isTranslationOpen;
+            
+            if(isTranslationOpen) {
                 box.style.display = 'block';
-                e.target.innerText = "🔼 收起文法解析";
+                e.target.innerText = "🙈 隱藏例句翻譯";
             } else {
                 box.style.display = 'none';
-                e.target.innerText = "🔍 查看句型文法結構";
+                e.target.innerText = "👁️ 顯示例句翻譯";
             }
         }
 
@@ -332,14 +265,15 @@
             document.getElementById('card-ch').innerText = word.ch;
             document.getElementById('card-ex').innerText = `例句：${word.ex}`;
             
-            // 填入動態生成的文法解析
-            document.getElementById('card-grammar').innerHTML = generateGrammarAnalysis(word);
+            // 填入 JSON 中的中文例句翻譯 (如果有 ex_ch 欄位就顯示，沒有就給溫馨提示)
+            const chTranslation = word.ex_ch ? word.ex_ch : "（此例句目前尚未在 words.json 中建置翻譯）";
+            document.getElementById('card-translation').innerText = chTranslation;
             
-            // 重設文法視窗為關閉狀態
-            document.getElementById('card-grammar').style.display = 'none';
-            const toggleBtn = document.querySelector('.grammar-toggle');
-            if(toggleBtn) toggleBtn.innerText = "🔍 查看句型文法結構";
-            isGrammarOpen = false;
+            // 每當換到下一張卡片，重設翻譯視窗為關閉狀態
+            document.getElementById('card-translation').style.display = 'none';
+            const toggleBtn = document.querySelector('.translation-toggle');
+            if(toggleBtn) toggleBtn.innerText = "👁️ 顯示例句翻譯";
+            isTranslationOpen = false;
 
             const isFav = favorites.some(item => item.id === word.id);
             document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
