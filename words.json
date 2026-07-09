@@ -1,0 +1,7 @@
+[
+  { "id": 1, "en": "implement", "pos": "v.", "ch": "實施、執行", "ex": "The company will implement a new policy next month." },
+  { "id": 2, "en": "prohibit", "pos": "v.", "ch": "禁止", "ex": "Smoking is strictly prohibited in the building." },
+  { "id": 3, "en": "clerical", "pos": "adj.", "ch": "文書的、辦事員的", "ex": "She is looking for a clerical job in the office." },
+  { "id": 4, "en": "subsequent", "pos": "adj.", "ch": "隨後的、接續的", "ex": "Subsequent events proved that he was right." },
+  { "id": 5, "en": "innovative", "pos": "adj.", "ch": "創新的", "ex": "We need innovative ideas to solve this financial crisis." }
+]

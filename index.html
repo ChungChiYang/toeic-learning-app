@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC 多益單字特訓王Pro</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #06b6d4;
+            --background-color: #f8fafc;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn {
+            padding: 10px 20px; border: none; background-color: #e2e8f0;
+            color: #4a5568; border-radius: 20px; cursor: pointer; font-weight: bold;
+        }
+        .tab-btn.active { background-color: var(--primary-color); color: white; }
+
+        .container {
+            width: 100%; max-width: 500px; min-height: 400px; background: white;
+            padding: 30px; border-radius: 16px; box-shadow: var(--card-shadow);
+            box-sizing: border-box; display: flex; flex-direction: column;
+        }
+
+        .panel { display: none; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        .panel.active { display: flex; }
+
+        /* 單字卡 */
+        .flashcard {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white; min-height: 220px; border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; cursor: pointer; text-align: center;
+            padding: 25px; box-sizing: border-box; position: relative;
+        }
+
+        /* 按鈕樣式 */
+        .audio-btn, .fav-btn {
+            position: absolute; background: rgba(25px,25px,25px,0.2); border: none;
+            color: white; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%;
+            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
+        }
+        .audio-btn { top: 15px; left: 15px; }
+        .fav-btn { top: 15px; right: 15px; background: none; font-size: 2rem;}
+        .fav-btn.active { color: #f43f5e; text-shadow: 0 0 10px rgba(244,63,94,0.5); }
+
+        /* 測驗 */
+        .quiz-word { font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #1e293b; }
+        .options-grid { display: grid; gap: 12px; }
+        .option-btn {
+            padding: 14px; border: 2px solid #e2e8f0; background: white;
+            border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left;
+        }
+        
+        .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; }
+        .action-btn {
+            padding: 10px 20px; border: none; background-color: var(--secondary-color);
+            color: white; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+        #feedback { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
+    </style>
+</head>
+<body>
+
+    <header style="text-align: center; margin-bottom: 20px;">
+        <h2>TOEIC 多益單字特訓王</h2>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('card-panel')">單字翻卡</button>
+        <button class="tab-btn" onclick="switchTab('quiz-panel')">四選一測驗</button>
+        <button class="tab-btn" onclick="switchTab('fav-panel')">錯題/收藏本 (<span id="fav-count">0</span>)</button>
+    </div>
+
+    <div class="container">
+        <div id="card-panel" class="panel active">
+            <div class="flashcard" onclick="flipCard()">
+                <button class="audio-btn" onclick="speakCurrentWord(event)">🔊</button>
+                <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">➔</button>
+                <h2 id="card-front">載入中...</h2>
+                <div id="card-back" style="display:none;">
+                    <p id="card-ch" style="font-size: 1.4rem; font-weight: bold; margin: 0 0 10px 0;"></p>
+                    <p id="card-ex" style="font-size: 0.95rem; opacity: 0.9; line-height: 1.4;"></p>
+                </div>
+            </div>
+            <div class="ctrl-btns">
+                <button class="action-btn" onclick="prevWord()">上一個</button>
+                <button class="action-btn" onclick="nextWord()">下一個</button>
+            </div>
+        </div>
+
+        <div id="quiz-panel" class="panel">
+            <div class="quiz-word" id="quiz-question">Question</div>
+            <div class="options-grid" id="quiz-options"></div>
+            <div id="feedback"></div>
+            <div class="ctrl-btns" style="justify-content: flex-end;">
+                <button class="action-btn" onclick="initQuiz()">下一題</button>
+            </div>
+        </div>
+
+        <div id="fav-panel" class="panel">
+            <div id="fav-list-container" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;">
+                </div>
+            <button class="action-btn" style="background-color: #ef4444;" onclick="clearAllFavorites()">清空錯題本</button>
+        </div>
+    </div>
+
+    <script>
+        let wordDatabase = [];
+        let currentIndex = 0;
+        let isFlipped = false;
+        let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || []; // 從本地讀取紀錄
+        let currentQuizWord = null;
+
+        // 頁面初始化：讀取外部 JSON
+        async function loadWords() {
+            try {
+                const response = await fetch('words.json');
+                wordDatabase = await response.json();
+                updateFavCount();
+                updateCard();
+            } catch (error) {
+                document.getElementById('card-front').innerText = "無法載入單字庫，請確認是否有使用伺服器環境開啟網頁。";
+                console.error("Error loading JSON:", error);
+            }
+        }
+
+        // 切換面板
+        function switchTab(panelId) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(panelId).classList.add('active');
+            event.target.classList.add('active');
+
+            if(panelId === 'quiz-panel') initQuiz();
+            if(panelId === 'fav-panel') renderFavorites();
+        }
+
+        // --- 發音功能 (Web Speech API) ---
+        function speakWord(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 先停止之前的發音
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; // 設定美式英文
+                utterance.rate = 0.9;     // 速度稍慢一點方便聽清楚
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+        function speakCurrentWord(e) {
+            e.stopPropagation(); // 防止觸發翻卡事件
+            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en);
+        }
+
+        // --- 錯題本/收藏夾邏輯 (LocalStorage) ---
+        function updateFavCount() {
+            document.getElementById('fav-count').innerText = favorites.length;
+        }
+
+        function toggleFavorite(e) {
+            e.stopPropagation(); // 防止翻卡
+            const currentWord = wordDatabase[currentIndex];
+            const favIndex = favorites.findIndex(item => item.id === currentWord.id);
+            
+            if (favIndex > -1) {
+                favorites.splice(favIndex, 1); // 已存在就移除
+            } else {
+                favorites.push(currentWord);   // 不存在就加入
+            }
+            
+            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+            updateFavCount();
+            updateCard();
+        }
+
+        function renderFavorites() {
+            const container = document.getElementById('fav-list-container');
+            container.innerHTML = "";
+            if(favorites.length === 0) {
+                container.innerHTML = "<p style='color:#718096; text-align:center;'>目前錯題本空空如也！</p>";
+                return;
+            }
+            favorites.forEach(word => {
+                const div = document.createElement('div');
+                div.style = "padding: 12px; border-bottom: 1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center;";
+                div.innerHTML = `
+                    <div>
+                        <strong style="color:var(--primary-color); font-size:1.1rem;">${word.en}</strong> (${word.pos})<br>
+                        <span style="color:#4a5568;">${word.ch}</span>
+                    </div>
+                    <button class="action-btn" style="padding:5px 10px; background-color:#718096;" onclick="speakWord('${word.en}')">🔊</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function clearAllFavorites() {
+            if(confirm("確定要清空所有錯題紀錄嗎？")) {
+                favorites = [];
+                localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+                updateFavCount();
+                renderFavorites();
+                updateCard();
+            }
+        }
+
+        // --- 單字卡邏輯 ---
+        function updateCard() {
+            if(wordDatabase.length === 0) return;
+            const word = wordDatabase[currentIndex];
+            document.getElementById('card-front').innerText = `${word.en} (${word.pos})`;
+            document.getElementById('card-ch').innerText = word.ch;
+            document.getElementById('card-ex').innerText = `Ex: ${word.ex}`;
+            
+            // 更新愛心狀態
+            const isFav = favorites.some(item => item.id === word.id);
+            document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
+            
+            document.getElementById('card-back').style.display = 'none';
+            document.getElementById('card-front').style.style = 'block';
+            isFlipped = false;
+        }
+
+        function flipCard() {
+            if(isFlipped) {
+                document.getElementById('card-front').style.display = 'block';
+                document.getElementById('card-back').style.display = 'none';
+            } else {
+                document.getElementById('card-front').style.display = 'none';
+                document.getElementById('card-back').style.display = 'block';
+                speakWord(wordDatabase[currentIndex].en); // 翻轉時也自動發音，加深印象
+            }
+            isFlipped = !isFlipped;
+        }
+
+        function nextWord() { currentIndex = (currentIndex + 1) % wordDatabase.length; updateCard(); }
+        function prevWord() { currentIndex = (currentIndex - 1 + wordDatabase.length) % wordDatabase.length; updateCard(); }
+
+        // --- 測驗邏輯 ---
+        function initQuiz() {
+            if(wordDatabase.length === 0) return;
+            document.getElementById('feedback').innerText = "";
+            
+            // 隨機選題
+            currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
+            document.getElementById('quiz-question').innerText = currentQuizWord.en;
+            speakWord(currentQuizWord.en); // 題目出來時自動發音
+
+            let choices = [currentQuizWord.ch];
+            while(choices.length < Math.min(4, wordDatabase.length)) {
+                let randomCh = wordDatabase[Math.floor(Math.random() * wordDatabase.length)].ch;
+                if(!choices.includes(randomCh)) choices.push(randomCh);
+            }
+            choices.sort(() => Math.random() - 0.5);
+
+            const optionsGrid = document.getElementById('quiz-options');
+            optionsGrid.innerHTML = "";
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = choice;
+                btn.onclick = () => checkAnswer(btn, choice);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(btn, choice) {
+            const feedback = document.getElementById('feedback');
+            if(choice === currentQuizWord.ch) {
+                feedback.innerText = "🎉 回答正確！";
+                feedback.style.color = "#10b981";
+                btn.style.backgroundColor = "#d1fae5";
+                btn.style.borderColor = "#10b981";
+            } else {
+                feedback.innerText = "❌ 答錯了！已自動加入錯題本。";
+                feedback.style.color = "#ef4444";
+                btn.style.backgroundColor = "#fee2e2";
+                btn.style.borderColor = "#ef4444";
+                
+                // 答錯自動加入 LocalStorage 錯題本
+                if (!favorites.some(item => item.id === currentQuizWord.id)) {
+                    favorites.push(currentQuizWord);
+                    localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+                    updateFavCount();
+                }
+            }
+        }
+
+        // 啟動程式
+        loadWords();
+    </script>
+</body>
+</html>
