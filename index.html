@@ -74,7 +74,7 @@
         .word-ex:hover { background: rgba(0,0,0,0.25); }
         .ex-hint { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 4px; text-align: right; }
 
-        /* 【新進功能】翻譯開關按鈕與外框樣式 */
+        /* 翻譯按鈕與外框 */
         .translation-toggle {
             background: rgba(255, 255, 255, 0.2); margin-top: 12px; padding: 6px 14px;
             border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
@@ -142,6 +142,7 @@
                         <span id="card-ex"></span>
                     </div>
                     
+                    <!-- 點擊即觸發外接即時翻譯 -->
                     <div class="translation-toggle" onclick="toggleTranslation(event)">👁️ 顯示例句翻譯</div>
                     <div class="translation-box" id="card-translation" onclick="event.stopPropagation()"></div>
                 </div>
@@ -179,9 +180,9 @@
 
         let cardHistory = [];
         let historyPointer = -1;
-        let isTranslationOpen = false; // 追蹤翻譯區塊是否開啟
+        let isTranslationOpen = false;
 
-        // 頁面初始化：讀取外部 JSON
+        // 頁面初始化
         async function loadWords() {
             try {
                 const response = await fetch('words.json');
@@ -201,16 +202,11 @@
             }
         }
 
-        // 切換面板
         function switchTab(panelId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
-            
-            if(event && event.target) {
-                event.target.classList.add('active');
-            }
-
+            if(event && event.target) event.target.classList.add('active');
             if(panelId === 'quiz-panel') initQuiz();
             if(panelId === 'fav-panel') renderFavorites();
         }
@@ -236,23 +232,58 @@
             if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].ex, true);
         }
 
-        // --- 錯題本邏輯 ---
         function updateFavCount() {
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
-        // --- 【新進核心】切換顯示例句翻譯功能 ---
-        function toggleTranslation(e) {
-            e.stopPropagation(); // 阻止卡片翻回去
+        // --- 【核心升級】外接免費開源 Google 翻譯接口 ---
+        async function fetchTranslation(text) {
+            try {
+                // 使用免費、免金鑰的開源 Google Translate 接口代理
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(text)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                // 解析 Google 回傳的巢狀陣列，將翻譯後的句子拼接起來
+                if (data && data[0]) {
+                    let translatedText = "";
+                    data[0].forEach(sentence => {
+                        if(sentence[0]) translatedText += sentence[0];
+                    });
+                    return translatedText;
+                }
+                return "翻譯解析失敗。";
+            } catch (error) {
+                console.error("Translation API Error:", error);
+                return "網路連線異常，無法取得即時翻譯。";
+            }
+        }
+
+        // 切換顯示與線上獲取翻譯
+        async function toggleTranslation(e) {
+            e.stopPropagation(); 
             const box = document.getElementById('card-translation');
+            const toggleBtn = e.target;
             isTranslationOpen = !isTranslationOpen;
             
             if(isTranslationOpen) {
                 box.style.display = 'block';
-                e.target.innerText = "🙈 隱藏例句翻譯";
+                toggleBtn.innerText = "⏳ 翻譯載入中...";
+                
+                // 如果目前的單字在 JSON 裡本來就沒附翻譯 (或是我們現在要強制外接)
+                const currentWord = wordDatabase[currentIndex];
+                
+                // 先確認這句是否已經翻譯過，避免重複戳 API
+                if (!currentWord.cached_translation) {
+                    const translatedResult = await fetchTranslation(currentWord.ex);
+                    currentWord.cached_translation = translatedResult; // 暫存起來
+                }
+                
+                box.innerText = currentWord.cached_translation;
+                toggleBtn.innerText = "🙈 隱藏例句翻譯";
             } else {
                 box.style.display = 'none';
-                e.target.innerText = "👁️ 顯示例句翻譯";
+                toggleBtn.innerText = "👁️ 顯示例句翻譯";
             }
         }
 
@@ -265,12 +296,9 @@
             document.getElementById('card-ch').innerText = word.ch;
             document.getElementById('card-ex').innerText = `例句：${word.ex}`;
             
-            // 填入 JSON 中的中文例句翻譯 (如果有 ex_ch 欄位就顯示，沒有就給溫馨提示)
-            const chTranslation = word.ex_ch ? word.ex_ch : "（此例句目前尚未在 words.json 中建置翻譯）";
-            document.getElementById('card-translation').innerText = chTranslation;
-            
-            // 每當換到下一張卡片，重設翻譯視窗為關閉狀態
+            // 換卡時清空並隱藏翻譯區塊
             document.getElementById('card-translation').style.display = 'none';
+            document.getElementById('card-translation').innerText = "";
             const toggleBtn = document.querySelector('.translation-toggle');
             if(toggleBtn) toggleBtn.innerText = "👁️ 顯示例句翻譯";
             isTranslationOpen = false;
@@ -286,7 +314,6 @@
         function flipCard() {
             const front = document.getElementById('card-front-text');
             const back = document.getElementById('card-back-area');
-            
             if(isFlipped) {
                 front.style.display = 'block';
                 back.style.display = 'none';
@@ -323,13 +350,11 @@
             e.stopPropagation(); 
             const currentWord = wordDatabase[currentIndex];
             const favIndex = favorites.findIndex(item => item.id === currentWord.id);
-            
             if (favIndex > -1) {
                 favorites.splice(favIndex, 1);
             } else {
                 favorites.push(currentWord);
             }
-            
             localStorage.setItem('toeic_favs', JSON.stringify(favorites));
             updateFavCount();
             updateCard();
@@ -370,7 +395,6 @@
         function initQuiz() {
             if(wordDatabase.length === 0) return;
             document.getElementById('feedback').innerText = "";
-            
             currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
             speakWord(currentQuizWord.en, false);
@@ -405,7 +429,6 @@
                 feedback.style.color = "#ef4444";
                 btn.style.backgroundColor = "#fee2e2";
                 btn.style.borderColor = "#ef4444";
-                
                 if (!favorites.some(item => item.id === currentQuizWord.id)) {
                     favorites.push(currentQuizWord);
                     localStorage.setItem('toeic_favs', JSON.stringify(favorites));
