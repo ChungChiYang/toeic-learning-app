@@ -129,13 +129,13 @@
         .action-btn { padding: 12px 24px; border: none; background-color: var(--secondary-color); color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; text-align: center; }
         #feedback { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
 
-        /* 彈出式小窗浮動層 (用於快速輸入筆記) */
+        /* 彈出式小窗浮動層 */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+            background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
         }
         .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;}
         .modal-textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; box-sizing: border-box; font-size: 0.95rem; resize: none; margin-bottom: 15px; }
@@ -228,24 +228,30 @@
             <button class="action-btn" style="background-color: #ef4444; flex-grow: 0;" onclick="clearAllFavorites()">清空錯題本</button>
         </div>
 
-        <!-- 4. 【新功能】獨立筆記大項目頁面 -->
+        <!-- 4. 獨立筆記大項目頁面 -->
         <div id="notes-panel" class="panel">
-            <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #64748b;">在此可修改或刪除你針對各單字寫下的個人筆記：</p>
-            <div id="notes-list-container" style="max-height: 600px; overflow-y: auto; margin-bottom: 15px;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px;">
+                <p style="margin: 0; font-size: 0.85rem; color: #64748b;">在此編輯或刪除你的個人筆記：</p>
+                <!-- 🚀 【新功能】匯出 JSON 的核心觸發按鈕 -->
+                <button class="action-btn" style="background-color: #10b981; padding: 6px 12px; font-size: 0.85rem; flex-grow: 0;" onclick="exportNotesToJSON()">📥 匯出筆記 JSON</button>
+            </div>
+            <div id="notes-list-container" style="max-height: 560px; overflow-y: auto; margin-bottom: 15px;"></div>
         </div>
     </div>
 
-    <!-- 彈出式隨手筆記小視窗 -->
+    <!-- 彈出式隨手筆記小視窗 / 兼顧匯出視窗 -->
     <div class="modal-overlay" id="note-modal" onclick="closeNoteModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-content" id="modal-container-block" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <span id="modal-title-text">📝 編輯單字筆記</span>
                 <button style="background:none; border:none; font-size:1.2rem; cursor:pointer;" onclick="closeNoteModal()">✕</button>
             </div>
-            <textarea id="modal-note-input" class="modal-textarea" rows="4" placeholder="輸入延伸字、衍生詞組、或是自訂備忘錄..."></textarea>
-            <div style="display:flex; gap:10px;">
+            <!-- 文字主要輸入/顯示區 -->
+            <textarea id="modal-note-input" class="modal-textarea" rows="4" placeholder="輸入延伸字、衍生詞組..."></textarea>
+            
+            <div id="modal-btn-group" style="display:flex; gap:10px;">
                 <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">取消</button>
-                <button class="action-btn" onclick="saveModalNote()">儲存筆記</button>
+                <button class="action-btn" id="modal-confirm-btn" onclick="saveModalNote()">儲存筆記</button>
             </div>
         </div>
     </div>
@@ -255,7 +261,7 @@
         let currentIndex = 0;
         let isFlipped = false;
         let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || [];
-        let wordNotes = JSON.parse(localStorage.getItem('toeic_notes')) || {}; // Key: wordId, Value: note字串
+        let wordNotes = JSON.parse(localStorage.getItem('toeic_notes')) || {}; 
         let currentQuizWord = null;
 
         let cardHistory = [];
@@ -288,7 +294,6 @@
             if(event && event.target) {
                 event.target.classList.add('active');
             } else {
-                // 如果是手動觸換，更新對應按鈕高亮
                 document.querySelectorAll('.tab-btn').forEach(b => {
                     if(b.getAttribute('onclick').includes(panelId)) b.classList.add('active');
                 });
@@ -318,11 +323,21 @@
 
         // --- 開啟右下角彈出筆記視窗 ---
         function openNoteModal(e) {
-            e.stopPropagation(); // 阻止卡片翻轉
+            e.stopPropagation(); 
             if(wordDatabase.length === 0) return;
             const currentWord = wordDatabase[currentIndex];
+            
+            // 恢復標準編輯窗外觀
             document.getElementById('modal-title-text').innerText = `📝 編輯【${currentWord.en}】的筆記`;
-            document.getElementById('modal-note-input').value = wordNotes[currentWord.id] || "";
+            const inputField = document.getElementById('modal-note-input');
+            inputField.value = wordNotes[currentWord.id] || "";
+            inputField.readOnly = false;
+            
+            document.getElementById('modal-btn-group').innerHTML = `
+                <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">取消</button>
+                <button class="action-btn" onclick="saveModalNote()">儲存筆記</button>
+            `;
+            
             document.getElementById('note-modal').style.display = 'flex';
         }
 
@@ -342,12 +357,58 @@
             closeNoteModal();
         }
 
+        // --- 🚀 【新功能】打包與導出包含單字資訊的完整 JSON 給 AI ---
+        function exportNotesToJSON() {
+            const notedIds = Object.keys(wordNotes);
+            if(notedIds.length === 0) {
+                alert("目前沒有任何筆記數據可以導出喔！");
+                return;
+            }
+
+            // 重組資料結構，方便未來的單字庫擴充
+            const exportData = [];
+            notedIds.forEach(id => {
+                const wordObj = wordDatabase.find(w => w.id == id);
+                exportData.push({
+                    word_id: id,
+                    word: wordObj ? wordObj.en : "Unknown",
+                    pos: wordObj ? wordObj.pos : "",
+                    ch_meaning: wordObj ? wordObj.ch : "",
+                    my_note: wordNotes[id]
+                });
+            });
+
+            // 將 JSON 字串格式化呈現
+            const jsonString = JSON.stringify(exportData, null, 2);
+            
+            // 借用同一個 Modal 視窗來顯示 JSON
+            document.getElementById('modal-title-text').innerText = "📥 請複製下方 JSON 資料給我";
+            const inputField = document.getElementById('modal-note-input');
+            inputField.value = jsonString;
+            inputField.readOnly = true; // 設定唯讀防止誤刪
+            
+            document.getElementById('modal-btn-group').innerHTML = `
+                <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">關閉</button>
+                <button class="action-btn" style="background-color:#10b981;" onclick="copyJsonText()">📋 一鍵複製 JSON</button>
+            `;
+            
+            document.getElementById('note-modal').style.display = 'flex';
+        }
+
+        function copyJsonText() {
+            const inputField = document.getElementById('modal-note-input');
+            inputField.select();
+            inputField.setSelectionRange(0, 99999); // 針對手機端優化
+            navigator.clipboard.writeText(inputField.value);
+            alert("JSON 已複製到剪貼簿！下次更新題庫時，直接貼這段文字給我就行囉！ 👍");
+            closeNoteModal();
+        }
+
         // --- 筆記大項目大頁面渲染功能 ---
         function renderNotesPage() {
             const container = document.getElementById('notes-list-container');
             container.innerHTML = "";
             
-            // 找出所有有寫筆記的單字 ID 陣列
             const notedIds = Object.keys(wordNotes);
             
             if(notedIds.length === 0) {
@@ -356,7 +417,6 @@
             }
 
             notedIds.forEach(id => {
-                // 從資料庫找出這個 ID 對應的單字基本資料
                 const wordObj = wordDatabase.find(w => w.id == id);
                 if (!wordObj) return; 
 
@@ -365,7 +425,8 @@
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <span class="note-card-title">${wordObj.en} <span style="font-size:0.8rem; font-weight:normal; color:#64748b;">(${wordObj.pos}) - ${wordObj.ch}</span></span>
-                        <button class="action-btn" style="background-color:#ef4444; padding:3px 8px; font-size:0.75rem; flex-grow:0;" onclick="deleteNoteFromPage('${id}')">🗑️ 刪除</button>
+                        <!-- 🚀 縮寫優化：將 [🗑️ 刪除] 改為精簡的 🗑️ 鈕 -->
+                        <button class="action-btn" style="background-color:#ef4444; padding:4px 8px; font-size:0.85rem; flex-grow:0; border-radius:6px;" title="刪除筆記" onclick="deleteNoteFromPage('${id}')">🗑️</button>
                     </div>
                     <textarea class="note-card-textarea" rows="2" placeholder="在此處編輯你的筆記..." oninput="updateNoteFromPage('${id}', this.value)">${wordNotes[id]}</textarea>
                 `;
@@ -386,7 +447,7 @@
             if(confirm("確定要刪除這條單字筆記嗎？")) {
                 delete wordNotes[id];
                 localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
-                renderNotesPage(); // 重新整理網頁
+                renderNotesPage(); 
             }
         }
 
@@ -509,7 +570,7 @@
             updateCard();
         }
 
-        // --- 錯題本渲染 (支援個別移除按鈕) ---
+        // --- 錯題本渲染 ---
         function renderFavorites() {
             const container = document.getElementById('fav-list-container');
             container.innerHTML = "";
@@ -529,8 +590,8 @@
                         </div>
                         <div style="display:flex; gap:6px;">
                             <button class="action-btn" style="padding:4px 8px; background-color:#718096; flex-grow:0; font-size:0.8rem;" onclick="speakWord('${word.en}', false)">🔊</button>
-                            <!-- 🚀 1. 個別移除收藏單字鍵 -->
-                            <button class="action-btn" style="padding:4px 8px; background-color:#ef4444; flex-grow:0; font-size:0.8rem;" onclick="removeSingleFavorite('${word.id}')">🗑️ 移除</button>
+                            <!-- 🚀 縮寫優化：同樣改為精簡的 🗑️ -->
+                            <button class="action-btn" style="padding:4px 8px; background-color:#ef4444; flex-grow:0; font-size:0.8rem;" title="移除收藏" onclick="removeSingleFavorite('${word.id}')">🗑️</button>
                         </div>
                     </div>
                     <div style="font-size:0.85rem; color:#64748b; background:#f1f5f9; padding:6px; border-radius:4px; word-break:break-word;">
@@ -541,6 +602,7 @@
             });
         }
 
+        // 移除單一錯題
         function removeSingleFavorite(wordId) {
             favorites = favorites.filter(item => item.id != wordId);
             localStorage.setItem('toeic_favs', JSON.stringify(favorites));
