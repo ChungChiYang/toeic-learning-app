@@ -22,10 +22,10 @@
             align-items: center;
         }
 
-        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+        .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
         .tab-btn {
-            padding: 10px 20px; border: none; background-color: #e2e8f0;
-            color: #4a5568; border-radius: 20px; cursor: pointer; font-weight: bold;
+            padding: 10px 16px; border: none; background-color: #e2e8f0;
+            color: #4a5568; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.9rem;
         }
         .tab-btn.active { background-color: var(--primary-color); color: white; }
 
@@ -61,24 +61,26 @@
             position: absolute; background: rgba(255,255,255,0.2); border: none;
             color: white; font-size: 1.3rem; cursor: pointer; padding: 0; border-radius: 50%;
             width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-            transition: background 0.2s;
-            z-index: 10;
+            transition: background 0.2s; z-index: 10;
         }
         .audio-btn:hover, .fav-btn:hover { background: rgba(255,255,255,0.4); }
         .audio-btn { top: 15px; left: 15px; }
         .fav-btn { top: 15px; right: 15px; background: rgba(255,255,255,0.1); font-size: 1.6rem;}
 
+        /* 右下角獨立筆記小圖標 */
+        .note-trigger-btn {
+            position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.3); border: none;
+            color: white; font-size: 1.2rem; cursor: pointer; border-radius: 50%;
+            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s; z-index: 10; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .note-trigger-btn:hover { background: rgba(0,0,0,0.5); }
+
         /* 卡片內中央區域 */
         .card-main-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            width: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; flex-grow: 1; width: 100%;
         }
 
-        /* 卡片內文字與排版優化 */
         #card-front-text { font-size: 2.2rem; font-weight: bold; letter-spacing: 0.5px; margin: 0; }
         #card-back-area { width: 100%; text-align: center; }
         .word-back-en { font-size: 1.8rem; font-weight: bold; letter-spacing: 0.5px; margin: 0 0 4px 0; color: rgba(255, 255, 255, 0.85); }
@@ -87,99 +89,66 @@
         .word-ex { 
             font-size: 1rem; opacity: 0.95; line-height: 1.5; margin: 0; 
             background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; 
-            text-align: left; word-break: break-word; cursor: pointer;
-            transition: background 0.2s; position: relative;
+            text-align: left; word-break: break-word; cursor: pointer; transition: background 0.2s;
         }
         .word-ex:hover { background: rgba(0,0,0,0.25); }
         .ex-hint { font-size: 0.7rem; opacity: 0.5; display: block; margin-bottom: 4px; text-align: right; }
 
-        /* 筆記區樣式 */
-        .note-area-wrapper {
-            margin-top: 12px; text-align: left; width: 100%;
-        }
-        .note-title { font-size: 0.75rem; opacity: 0.8; font-weight: bold; margin-bottom: 4px; display: block;}
-        .note-input {
-            width: 100%; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25);
-            color: white; border-radius: 6px; padding: 6px 10px; font-size: 0.85rem; box-sizing: border-box;
-            resize: none; font-family: inherit; transition: all 0.2s;
-        }
-        .note-input:focus { background: rgba(255, 255, 255, 0.25); outline: none; border-color: #fff; }
-        .note-input::placeholder { color: rgba(255,255,255,0.4); }
-
-        /* 收藏本中的獨立備忘錄樣式 */
-        .fav-note-input {
-            width: 100%; border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 6px;
-            padding: 6px 10px; font-size: 0.85rem; box-sizing: border-box; resize: none; margin-top: 5px; color: #334155;
-        }
-        .fav-note-input:focus { background: #fff; outline: none; border-color: var(--primary-color); }
-
-        /* 翻譯按鈕與外框 */
+        /* 翻譯與字典 */
         .translation-toggle {
             background: rgba(255, 255, 255, 0.2); margin-top: 12px; padding: 6px 14px;
-            border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
-            display: inline-block; transition: background 0.2s;
+            border-radius: 6px; font-size: 0.85rem; font-weight: bold; cursor: pointer; display: inline-block;
         }
-        .translation-toggle:hover { background: rgba(255, 255, 255, 0.35); }
-        
         .translation-box {
-            display: none; background: rgba(0, 0, 0, 0.2); color: #ffffff;
-            margin-top: 10px; padding: 10px 12px; border-radius: 8px; text-align: left;
-            font-size: 0.9rem; line-height: 1.4; border-left: 3px solid var(--secondary-color);
+            display: none; background: rgba(0, 0, 0, 0.2); color: #ffffff; margin-top: 10px;
+            padding: 10px 12px; border-radius: 8px; text-align: left; font-size: 0.9rem; line-height: 1.4; border-left: 3px solid var(--secondary-color);
         }
-
-        /* 字典按鈕區塊 */
-        .dict-section {
-            margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.3);
-            text-align: center; width: 100%;
-        }
-        .dict-title { font-size: 0.75rem; opacity: 0.7; margin-bottom: 6px; font-weight: bold; letter-spacing: 0.5px;}
+        .dict-section { margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.3); text-align: center; width: 100%; }
+        .dict-title { font-size: 0.75rem; opacity: 0.7; margin-bottom: 6px; font-weight: bold;}
         .dict-btn-group { display: flex; gap: 10px; justify-content: center; }
         .dict-btn {
-            background: #ffffff; color: #4f46e5; border: none;
-            padding: 6px 14px; border-radius: 15px; font-size: 0.8rem; font-weight: bold;
-            cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .dict-btn:hover { background: #f1f5f9; transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
-
-        .click-hint { 
-            font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; margin-top: 15px; user-select: none;
+            background: #ffffff; color: #4f46e5; border: none; padding: 6px 14px; border-radius: 15px;
+            font-size: 0.8rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.4; }
-        }
+        .click-hint { font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; margin-top: 15px; user-select: none; }
+        @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 0.8; } 100% { opacity: 0.4; } }
 
         /* 測驗 */
         .quiz-word { font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #1e293b; }
         .options-grid { display: grid; gap: 12px; }
         .option-btn {
             padding: 14px; border: 2px solid #e2e8f0; background: white;
-            border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left;
-            font-weight: 500; color: #334155; transition: all 0.2s;
+            border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left; font-weight: 500; color: #334155;
         }
-
-        /* 測驗下的查看例句提示功能 */
         .quiz-hint-btn {
-            background: none; border: 1px dashed #94a3b8; color: #64748b;
-            padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer;
-            margin-top: 15px; font-weight: 500; transition: all 0.2s; align-self: center;
+            background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; margin-top: 15px; align-self: center;
         }
-        .quiz-hint-btn:hover { background: #f1f5f9; color: var(--primary-color); border-color: var(--primary-color); }
-        .quiz-hint-box {
-            display: none; background: #f8fafc; border-left: 3px solid #94a3b8;
-            padding: 12px; border-radius: 6px; font-size: 0.95rem; color: #334155;
-            margin-top: 10px; line-height: 1.4; text-align: left;
-        }
-        
+        .quiz-hint-box { display: none; background: #f8fafc; border-left: 3px solid #94a3b8; padding: 12px; border-radius: 6px; font-size: 0.95rem; margin-top: 10px; text-align: left; }
         .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
-        .action-btn {
-            padding: 12px 24px; border: none; background-color: var(--secondary-color);
-            color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1;
-            text-align: center;
-        }
+        .action-btn { padding: 12px 24px; border: none; background-color: var(--secondary-color); color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; text-align: center; }
         #feedback { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
+
+        /* 彈出式小窗浮動層 (用於快速輸入筆記) */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+        }
+        .modal-content {
+            background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+        }
+        .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;}
+        .modal-textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; box-sizing: border-box; font-size: 0.95rem; resize: none; margin-bottom: 15px; }
+
+        /* 筆記大項目清單樣式 */
+        .note-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 12px;
+            display: flex; flex-direction: column; gap: 6px; position: relative;
+        }
+        .note-card-title { font-weight: bold; color: var(--primary-color); font-size: 1.05rem; }
+        .note-card-textarea {
+            width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 10px; box-sizing: border-box; font-size: 0.9rem; background: #fff; color: #334155;
+        }
     </style>
 </head>
 <body>
@@ -192,14 +161,19 @@
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('card-panel')">單字翻卡</button>
         <button class="tab-btn" onclick="switchTab('quiz-panel')">四選一測驗</button>
-        <button class="tab-btn" onclick="switchTab('fav-panel')">錯題/收藏本 (<span id="fav-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('fav-panel')">錯題本 (<span id="fav-count">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('notes-panel')">📝 隨手筆記本</button>
     </div>
 
     <div class="container">
+        <!-- 1. 單字翻卡分頁 -->
         <div id="card-panel" class="panel active">
             <div class="flashcard" onclick="flipCard()">
                 <button class="audio-btn" onclick="speakCurrentWord(event)">🔊</button>
                 <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">🤍</button>
+                
+                <!-- 右下角小圖標：點選跳出筆記輸入窗 -->
+                <button class="note-trigger-btn" title="填寫筆記" onclick="openNoteModal(event)">📝</button>
                 
                 <div class="card-main-content">
                     <h2 id="card-front-text">載入中...</h2>
@@ -211,11 +185,6 @@
                         <div class="word-ex" id="card-ex-box" onclick="speakCurrentExample(event)">
                             <span class="ex-hint">🔊 點擊區塊可聽整句發音</span>
                             <span id="card-ex"></span>
-                        </div>
-                        
-                        <div class="note-area-wrapper" onclick="event.stopPropagation()">
-                            <label class="note-title" for="card-note">📝 延伸字/例句延伸筆記 (自動儲存)：</label>
-                            <textarea id="card-note" class="note-input" rows="2" placeholder="記下例句中不懂的單字、片語..." oninput="saveCardNote()"></textarea>
                         </div>
                         
                         <div class="translation-toggle" onclick="toggleTranslation(event)">👁️ 顯示例句翻譯</div>
@@ -230,7 +199,6 @@
                         </div>
                     </div>
                 </div>
-
                 <span class="click-hint">點擊卡片翻面</span>
             </div>
             
@@ -240,6 +208,7 @@
             </div>
         </div>
 
+        <!-- 2. 四選一測驗分頁 -->
         <div id="quiz-panel" class="panel">
             <div class="quiz-word" id="quiz-question">Question</div>
             <div class="options-grid" id="quiz-options"></div>
@@ -253,9 +222,31 @@
             </div>
         </div>
 
+        <!-- 3. 錯題/收藏本分頁 -->
         <div id="fav-panel" class="panel">
             <div id="fav-list-container" style="max-height: 600px; overflow-y: auto; margin-bottom: 15px;"></div>
             <button class="action-btn" style="background-color: #ef4444; flex-grow: 0;" onclick="clearAllFavorites()">清空錯題本</button>
+        </div>
+
+        <!-- 4. 【新功能】獨立筆記大項目頁面 -->
+        <div id="notes-panel" class="panel">
+            <p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #64748b;">在此可修改或刪除你針對各單字寫下的個人筆記：</p>
+            <div id="notes-list-container" style="max-height: 600px; overflow-y: auto; margin-bottom: 15px;"></div>
+        </div>
+    </div>
+
+    <!-- 彈出式隨手筆記小視窗 -->
+    <div class="modal-overlay" id="note-modal" onclick="closeNoteModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span id="modal-title-text">📝 編輯單字筆記</span>
+                <button style="background:none; border:none; font-size:1.2rem; cursor:pointer;" onclick="closeNoteModal()">✕</button>
+            </div>
+            <textarea id="modal-note-input" class="modal-textarea" rows="4" placeholder="輸入延伸字、衍生詞組、或是自訂備忘錄..."></textarea>
+            <div style="display:flex; gap:10px;">
+                <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">取消</button>
+                <button class="action-btn" onclick="saveModalNote()">儲存筆記</button>
+            </div>
         </div>
     </div>
 
@@ -264,15 +255,13 @@
         let currentIndex = 0;
         let isFlipped = false;
         let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || [];
-        // 用字典物件存筆記，Key為單字ID，Value為筆記字串
-        let wordNotes = JSON.parse(localStorage.getItem('toeic_notes')) || {};
+        let wordNotes = JSON.parse(localStorage.getItem('toeic_notes')) || {}; // Key: wordId, Value: note字串
         let currentQuizWord = null;
 
         let cardHistory = [];
         let historyPointer = -1;
         let isTranslationOpen = false;
 
-        // 頁面初始化
         async function loadWords() {
             try {
                 const response = await fetch('words.json');
@@ -295,12 +284,22 @@
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
-            if(event && event.target) event.target.classList.add('active');
+            
+            if(event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // 如果是手動觸換，更新對應按鈕高亮
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    if(b.getAttribute('onclick').includes(panelId)) b.classList.add('active');
+                });
+            }
+
             if(panelId === 'quiz-panel') initQuiz();
             if(panelId === 'fav-panel') renderFavorites();
+            if(panelId === 'notes-panel') renderNotesPage();
         }
 
-        // --- 發音核心功能 ---
+        // --- 發音功能 ---
         function speakWord(text, isSentence = false) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel(); 
@@ -310,22 +309,88 @@
                 window.speechSynthesis.speak(utterance);
             }
         }
-        
-        function speakCurrentWord(e) {
-            e.stopPropagation(); 
-            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en, false);
-        }
-
-        function speakCurrentExample(e) {
-            e.stopPropagation(); 
-            if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].ex, true);
-        }
+        function speakCurrentWord(e) { e.stopPropagation(); if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en, false); }
+        function speakCurrentExample(e) { e.stopPropagation(); if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].ex, true); }
 
         function updateFavCount() {
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
-        // --- 外接免費開源 Google 翻譯接口 ---
+        // --- 開啟右下角彈出筆記視窗 ---
+        function openNoteModal(e) {
+            e.stopPropagation(); // 阻止卡片翻轉
+            if(wordDatabase.length === 0) return;
+            const currentWord = wordDatabase[currentIndex];
+            document.getElementById('modal-title-text').innerText = `📝 編輯【${currentWord.en}】的筆記`;
+            document.getElementById('modal-note-input').value = wordNotes[currentWord.id] || "";
+            document.getElementById('note-modal').style.display = 'flex';
+        }
+
+        function closeNoteModal() {
+            document.getElementById('note-modal').style.display = 'none';
+        }
+
+        function saveModalNote() {
+            const currentWord = wordDatabase[currentIndex];
+            const textValue = document.getElementById('modal-note-input').value.trim();
+            if(textValue === "") {
+                delete wordNotes[currentWord.id];
+            } else {
+                wordNotes[currentWord.id] = textValue;
+            }
+            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
+            closeNoteModal();
+        }
+
+        // --- 筆記大項目大頁面渲染功能 ---
+        function renderNotesPage() {
+            const container = document.getElementById('notes-list-container');
+            container.innerHTML = "";
+            
+            // 找出所有有寫筆記的單字 ID 陣列
+            const notedIds = Object.keys(wordNotes);
+            
+            if(notedIds.length === 0) {
+                container.innerHTML = "<p style='color:#718096; text-align:center; padding: 20px;'>目前沒有任何單字筆記喔！<br><small>可在單字卡右下角點選 📝 圖標新增。</small></p>";
+                return;
+            }
+
+            notedIds.forEach(id => {
+                // 從資料庫找出這個 ID 對應的單字基本資料
+                const wordObj = wordDatabase.find(w => w.id == id);
+                if (!wordObj) return; 
+
+                const card = document.createElement('div');
+                card.className = 'note-card';
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="note-card-title">${wordObj.en} <span style="font-size:0.8rem; font-weight:normal; color:#64748b;">(${wordObj.pos}) - ${wordObj.ch}</span></span>
+                        <button class="action-btn" style="background-color:#ef4444; padding:3px 8px; font-size:0.75rem; flex-grow:0;" onclick="deleteNoteFromPage('${id}')">🗑️ 刪除</button>
+                    </div>
+                    <textarea class="note-card-textarea" rows="2" placeholder="在此處編輯你的筆記..." oninput="updateNoteFromPage('${id}', this.value)">${wordNotes[id]}</textarea>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function updateNoteFromPage(id, value) {
+            if(value.trim() === "") {
+                delete wordNotes[id];
+            } else {
+                wordNotes[id] = value;
+            }
+            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
+        }
+
+        function deleteNoteFromPage(id) {
+            if(confirm("確定要刪除這條單字筆記嗎？")) {
+                delete wordNotes[id];
+                localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
+                renderNotesPage(); // 重新整理網頁
+            }
+        }
+
+        // --- 網路翻譯接口 ---
         async function fetchTranslation(text) {
             try {
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(text)}`;
@@ -337,9 +402,7 @@
                     return translatedText;
                 }
                 return "翻譯解析失敗。";
-            } catch (error) {
-                return "網路連線異常，無法取得即時翻譯。";
-            }
+            } catch (error) { return "網路連線異常，無法取得即時翻譯。"; }
         }
 
         async function toggleTranslation(e) {
@@ -363,35 +426,14 @@
             }
         }
 
-        // --- 彈出字典視窗控制 ---
         function openDictionary(type) {
             if (wordDatabase.length === 0) return;
             const currentWord = wordDatabase[currentIndex];
             const cleanWord = currentWord.en.trim().toLowerCase().replace(/[^a-z-]/g, '');
-            
-            let targetUrl = "";
-            if (type === 'cambridge') {
-                targetUrl = `https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/${cleanWord}`;
-            } else if (type === 'webster') {
-                targetUrl = `https://www.merriam-webster.com/dictionary/${cleanWord}`;
-            }
-            
-            const windowFeatures = "width=540,height=650,top=120,left=120,resizable=yes,scrollbars=yes,status=no,toolbar=no,menubar=no";
-            window.open(targetUrl, "ToeicDictWindow", windowFeatures);
-        }
-
-        // --- 筆記儲存邏輯 ---
-        function saveCardNote() {
-            if (wordDatabase.length === 0) return;
-            const currentWord = wordDatabase[currentIndex];
-            const noteText = document.getElementById('card-note').value;
-            wordNotes[currentWord.id] = noteText;
-            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
-        }
-
-        function saveFavNote(wordId, value) {
-            wordNotes[wordId] = value;
-            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
+            let targetUrl = type === 'cambridge' 
+                ? `https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/${cleanWord}`
+                : `https://www.merriam-webster.com/dictionary/${cleanWord}`;
+            window.open(targetUrl, "ToeicDictWindow", "width=540,height=650,top=120,left=120,resizable=yes,scrollbars=yes");
         }
 
         // --- 單字卡邏輯 ---
@@ -400,20 +442,14 @@
             const word = wordDatabase[currentIndex];
             
             document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
-            
-            // 背面資料同步填入
             document.getElementById('card-back-en').innerText = `${word.en} (${word.pos})`;
             document.getElementById('card-ch').innerText = word.ch;
             document.getElementById('card-ex').innerText = `例句：${word.ex}`;
             
-            // 載入該字儲存的筆記
-            document.getElementById('card-note').value = wordNotes[word.id] || "";
-            
             document.getElementById('card-translation').style.display = 'none';
-            document.getElementById('card-translation').innerText = "";
+            isTranslationOpen = false;
             const toggleBtn = document.querySelector('.translation-toggle');
             if(toggleBtn) toggleBtn.innerText = "👁️ 顯示例句翻譯";
-            isTranslationOpen = false;
 
             const isFav = favorites.some(item => item.id === word.id);
             document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
@@ -424,9 +460,7 @@
         }
 
         function flipCard() {
-            // 如果是在點擊筆記框或字典區，不引發翻轉卡片
-            if (event.target.closest('.note-area-wrapper') || event.target.closest('.dict-section') || event.target.closest('.translation-toggle')) return;
-            
+            if (event.target.closest('.dict-section') || event.target.closest('.translation-toggle') || event.target.closest('.note-trigger-btn')) return;
             const front = document.getElementById('card-front-text');
             const back = document.getElementById('card-back-area');
             if(isFlipped) {
@@ -475,6 +509,7 @@
             updateCard();
         }
 
+        // --- 錯題本渲染 (支援個別移除按鈕) ---
         function renderFavorites() {
             const container = document.getElementById('fav-list-container');
             container.innerHTML = "";
@@ -484,28 +519,34 @@
             }
             favorites.forEach(word => {
                 const div = document.createElement('div');
-                div.style = "padding: 14px; border-bottom: 1px solid #e2e8f0; display:flex; flex-direction:column; gap:6px;";
-                
-                const savedNote = wordNotes[word.id] || "";
+                div.style = "padding: 14px; border-bottom: 1px solid #e2e8f0; display:flex; flex-direction:column; gap:6px; position:relative;";
                 
                 div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; justify-content:space-between; align-items:start;">
                         <div>
                             <strong style="color:var(--primary-color); font-size:1.1rem;">${word.en}</strong> (${word.pos})<br>
                             <span style="color:#4a5568; font-weight:bold;">${word.ch}</span>
                         </div>
-                        <button class="action-btn" style="padding:5px 10px; background-color:#718096; flex-grow:0;" onclick="speakWord('${word.en}', false)">🔊</button>
+                        <div style="display:flex; gap:6px;">
+                            <button class="action-btn" style="padding:4px 8px; background-color:#718096; flex-grow:0; font-size:0.8rem;" onclick="speakWord('${word.en}', false)">🔊</button>
+                            <!-- 🚀 1. 個別移除收藏單字鍵 -->
+                            <button class="action-btn" style="padding:4px 8px; background-color:#ef4444; flex-grow:0; font-size:0.8rem;" onclick="removeSingleFavorite('${word.id}')">🗑️ 移除</button>
+                        </div>
                     </div>
                     <div style="font-size:0.85rem; color:#64748b; background:#f1f5f9; padding:6px; border-radius:4px; word-break:break-word;">
                         例句：${word.ex}
                     </div>
-                    <div>
-                        <span style="font-size:0.75rem; color:#4f46e5; font-weight:bold;">📝 隨手筆記：</span>
-                        <textarea class="fav-note-input" rows="1" placeholder="在此補充此字延伸心得..." oninput="saveFavNote(${word.id}, this.value)">${savedNote}</textarea>
-                    </div>
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function removeSingleFavorite(wordId) {
+            favorites = favorites.filter(item => item.id != wordId);
+            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+            updateFavCount();
+            renderFavorites();
+            updateCard();
         }
 
         function clearAllFavorites() {
@@ -522,10 +563,8 @@
         function initQuiz() {
             if(wordDatabase.length === 0) return;
             document.getElementById('feedback').innerText = "";
-            
             const hintBox = document.getElementById('quiz-hint-box');
             hintBox.style.display = 'none';
-            hintBox.innerText = "";
             
             currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
@@ -556,12 +595,9 @@
             hintBox.style.display = (hintBox.style.display === 'block') ? 'none' : 'block';
         }
 
-        // 🚀 1. 優化優化：答錯時一併將正確答案標明出來
         function checkAnswer(selectedBtn, choice) {
             const feedback = document.getElementById('feedback');
             const allButtons = document.querySelectorAll('.option-btn');
-            
-            // 答完後鎖定全數按鈕，防止重複點擊
             allButtons.forEach(btn => btn.disabled = true);
 
             if(choice === currentQuizWord.ch) {
@@ -570,12 +606,11 @@
                 selectedBtn.style.backgroundColor = "#d1fae5";
                 selectedBtn.style.borderColor = "#10b981";
             } else {
-                feedback.innerText = "❌ 答錯了！已自動加入錯題本。";
+                feedback.innerText = "❌ 錯題已加入錯題本。";
                 feedback.style.color = "#ef4444";
                 selectedBtn.style.backgroundColor = "#fee2e2";
                 selectedBtn.style.borderColor = "#ef4444";
                 
-                // 找出哪一個按鈕是正確答案，並同步將其底框高亮顯示為綠色
                 allButtons.forEach(btn => {
                     if (btn.innerText === currentQuizWord.ch) {
                         btn.style.backgroundColor = "#d1fae5";
