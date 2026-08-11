@@ -3130,7 +3130,7 @@
   { "id": 3129, "en": "realistic", "pos": "adj.", "ch": "務實的、切合實際的", "ex": "Set realistic performance goals to maintain team productivity." },
   { "id": 3130, "en": "reality", "pos": "n.", "ch": "現實、真實", "ex": "In reality, the project cost exceeded original estimates." },
   { "id": 3131, "en": "realize", "pos": "v.", "ch": "意識到、實現", "ex": "The team realized that additional safety precautions were necessary." },
-  { "id": 3132, "en": "really", "adv.", "ch": "真正地、確實", "ex": "The new automated software is really easy to navigate." },
+  { "id": 3132, "en": "really", "pos": "adv.", "ch": "真正地、確實", "ex": "The new automated software is really easy to navigate." },
   { "id": 3133, "en": "realtor", "pos": "n.", "ch": "房屋仲介、地產經紀人", "ex": "The licensed realtor listed the commercial building for lease." },
   { "id": 3134, "en": "realty", "pos": "n.", "ch": "房地產、不動產", "ex": "The agency specializes in commercial realty investments." },
   { "id": 3135, "en": "reallocate", "pos": "v.", "ch": "重新分配、重新配置", "ex": "Management decided to reallocate funds to digital research." },
