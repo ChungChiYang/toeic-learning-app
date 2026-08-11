@@ -127,7 +127,7 @@
         .quiz-hint-box { display: none; background: #f8fafc; border-left: 3px solid #94a3b8; padding: 12px; border-radius: 6px; font-size: 0.95rem; margin-top: 10px; text-align: left; }
         .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
         .action-btn { padding: 12px 24px; border: none; background-color: var(--secondary-color); color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; text-align: center; }
-        #feedback { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
+        .feedback-text { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
 
         /* 彈出式小窗浮動層 */
         .modal-overlay {
@@ -149,6 +149,14 @@
         .note-card-textarea {
             width: 100%; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 10px; box-sizing: border-box; font-size: 0.9rem; background: #fff; color: #334155;
         }
+        
+        /* 錯題本空狀態提醒 */
+        .empty-fav-box {
+            text-align: center; padding: 40px 20px; color: #64748b;
+        }
+        .empty-fav-box button {
+            margin-top: 15px; background-color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -161,6 +169,8 @@
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('card-panel')">單字翻卡</button>
         <button class="tab-btn" onclick="switchTab('quiz-panel')">四選一測驗</button>
+        <!-- 🚀 新增的分頁按鈕 -->
+        <button class="tab-btn" onclick="switchTab('fav-quiz-panel')">🎯錯題/題庫複習</button>
         <button class="tab-btn" onclick="switchTab('fav-panel')">錯題/收藏本 (<span id="fav-count">0</span>)</button>
         <button class="tab-btn" onclick="switchTab('notes-panel')">📝筆記本</button>
     </div>
@@ -172,7 +182,6 @@
                 <button class="audio-btn" onclick="speakCurrentWord(event)">🔊</button>
                 <button class="fav-btn" id="card-fav-toggle" onclick="toggleFavorite(event)">🤍</button>
                 
-                <!-- 右下角小圖標：點選跳出筆記輸入窗 -->
                 <button class="note-trigger-btn" title="填寫筆記" onclick="openNoteModal(event)">📝</button>
                 
                 <div class="card-main-content">
@@ -208,13 +217,13 @@
             </div>
         </div>
 
-        <!-- 2. 四選一測驗分頁 -->
+        <!-- 2. 全域四選一測驗分頁 -->
         <div id="quiz-panel" class="panel">
             <div class="quiz-word" id="quiz-question">Question</div>
             <div class="options-grid" id="quiz-options"></div>
-            <div id="feedback"></div>
+            <div id="feedback" class="feedback-text"></div>
             
-            <button class="quiz-hint-btn" onclick="toggleQuizHint()">💡 查看提示例句</button>
+            <button class="quiz-hint-btn" onclick="toggleQuizHint('quiz-hint-box')">💡 查看提示例句</button>
             <div class="quiz-hint-box" id="quiz-hint-box"></div>
 
             <div class="ctrl-btns" style="justify-content: flex-end;">
@@ -222,31 +231,55 @@
             </div>
         </div>
 
-        <!-- 3. 錯題/收藏本分頁 -->
+        <!-- 🚀 3. 【新功能】錯題/題庫複習專用測驗分頁 -->
+        <div id="fav-quiz-panel" class="panel">
+            <div id="fav-quiz-content" style="display:flex; flex-direction:column; flex-grow:1; justify-content:space-between;">
+                <div>
+                    <div style="font-size: 0.85rem; color: #64748b; text-align: center; margin-bottom: 5px;">🎯 錯題本強化特訓區</div>
+                    <div class="quiz-word" id="fav-quiz-question">Question</div>
+                    <div class="options-grid" id="fav-quiz-options"></div>
+                    <div id="fav-feedback" class="feedback-text"></div>
+                    
+                    <button class="quiz-hint-btn" onclick="toggleQuizHint('fav-quiz-hint-box')">💡 查看提示例句</button>
+                    <div class="quiz-hint-box" id="fav-quiz-hint-box"></div>
+                </div>
+
+                <div class="ctrl-btns" style="justify-content: flex-end;">
+                    <button class="action-btn" onclick="initFavQuiz()">下一題</button>
+                </div>
+            </div>
+
+            <!-- 無收藏時顯示此提示 -->
+            <div id="fav-quiz-empty" class="empty-fav-box" style="display:none;">
+                <h3 style="margin-top:0;">錯題本目前是空的！🎉</h3>
+                <p>你在「單字翻卡」點選 🤍 收藏，或是測驗答錯的單字，都會自動收錄到錯題本中。</p>
+                <button class="action-btn" onclick="switchTab('card-panel')">前往單字卡學習</button>
+            </div>
+        </div>
+
+        <!-- 4. 錯題/收藏本清單分頁 -->
         <div id="fav-panel" class="panel">
             <div id="fav-list-container" style="max-height: 600px; overflow-y: auto; margin-bottom: 15px;"></div>
             <button class="action-btn" style="background-color: #ef4444; flex-grow: 0;" onclick="clearAllFavorites()">清空錯題本</button>
         </div>
 
-        <!-- 4. 獨立筆記大項目頁面 -->
+        <!-- 5. 獨立筆記大項目頁面 -->
         <div id="notes-panel" class="panel">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px;">
                 <p style="margin: 0; font-size: 0.85rem; color: #64748b;">在此編輯或刪除你的個人筆記：</p>
-                <!-- 🚀 【新功能】匯出 JSON 的核心觸發按鈕 -->
                 <button class="action-btn" style="background-color: #10b981; padding: 6px 12px; font-size: 0.85rem; flex-grow: 0;" onclick="exportNotesToJSON()">📥 匯出筆記 JSON</button>
             </div>
             <div id="notes-list-container" style="max-height: 560px; overflow-y: auto; margin-bottom: 15px;"></div>
         </div>
     </div>
 
-    <!-- 彈出式隨手筆記小視窗 / 兼顧匯出視窗 -->
+    <!-- 彈出式隨手筆記小視窗 -->
     <div class="modal-overlay" id="note-modal" onclick="closeNoteModal()">
         <div class="modal-content" id="modal-container-block" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <span id="modal-title-text">📝 編輯單字筆記</span>
                 <button style="background:none; border:none; font-size:1.2rem; cursor:pointer;" onclick="closeNoteModal()">✕</button>
             </div>
-            <!-- 文字主要輸入/顯示區 -->
             <textarea id="modal-note-input" class="modal-textarea" rows="4" placeholder="輸入延伸字、衍生詞組..."></textarea>
             
             <div id="modal-btn-group" style="display:flex; gap:10px;">
@@ -257,87 +290,319 @@
     </div>
 
     <script>
-        let wordDatabase = [];
+        let words = [];
         let currentIndex = 0;
         let isFlipped = false;
+        let historyStack = [];
+        
         let favorites = JSON.parse(localStorage.getItem('toeic_favs')) || [];
-        let wordNotes = JSON.parse(localStorage.getItem('toeic_notes')) || {}; 
+        let notes = JSON.parse(localStorage.getItem('toeic_notes')) || {};
+
         let currentQuizWord = null;
+        let currentFavQuizWord = null;
 
-        let cardHistory = [];
-        let historyPointer = -1;
-        let isTranslationOpen = false;
-
+        // 初始化
         async function loadWords() {
             try {
-                const response = await fetch('words.json');
-                wordDatabase = await response.json();
+                const response = await fetch('./words.json');
+                if (!response.ok) throw new Error('無法載入單字檔');
+                words = await response.json();
                 updateFavCount();
                 
-                if (wordDatabase.length > 0) {
-                    currentIndex = Math.floor(Math.random() * wordDatabase.length);
-                    cardHistory.push(currentIndex);
-                    historyPointer = 0;
+                if(words.length > 0) {
+                    showWord(0);
+                    initQuiz();
                 }
-                updateCard();
             } catch (error) {
-                document.getElementById('card-front-text').innerText = "無法載入單字庫，請確認 JSON 檔案是否存在。";
-                console.error("Error loading JSON:", error);
+                document.getElementById('card-front-text').innerText = "載入失敗，請檢查 words.json";
+                console.error(error);
             }
         }
 
-        function switchTab(panelId) {
+        // 分頁切換
+        function switchTab(tabId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(panelId).classList.add('active');
             
-            if(event && event.target) {
-                event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // 找到對應按鈕加上 active 效果
+            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+            if(activeBtn) activeBtn.classList.add('active');
+
+            if (tabId === 'fav-panel') renderFavList();
+            if (tabId === 'notes-panel') renderNotesList();
+            if (tabId === 'quiz-panel') initQuiz();
+            if (tabId === 'fav-quiz-panel') initFavQuiz(); // 切換到錯題測驗時初始化
+        }
+
+        // ---- 單字卡模組 ----
+        function showWord(index) {
+            if (words.length === 0) return;
+            currentIndex = index;
+            isFlipped = false;
+            
+            const w = words[currentIndex];
+            document.getElementById('card-front-text').innerText = w.en;
+            document.getElementById('card-back-en').innerText = w.en;
+            document.getElementById('card-ch').innerText = `${w.pos} ${w.ch}`;
+            document.getElementById('card-ex').innerText = w.ex;
+            
+            document.getElementById('card-back-area').style.display = 'none';
+            document.getElementById('card-front-text').style.display = 'block';
+            document.getElementById('card-translation').style.display = 'none';
+
+            updateFavHeartUI();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                document.getElementById('card-front-text').style.display = 'none';
+                document.getElementById('card-back-area').style.display = 'block';
             } else {
-                document.querySelectorAll('.tab-btn').forEach(b => {
-                    if(b.getAttribute('onclick').includes(panelId)) b.classList.add('active');
-                });
-            }
-
-            if(panelId === 'quiz-panel') initQuiz();
-            if(panelId === 'fav-panel') renderFavorites();
-            if(panelId === 'notes-panel') renderNotesPage();
-        }
-
-        // --- 發音功能 ---
-        function speakWord(text, isSentence = false) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel(); 
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-US';
-                utterance.rate = isSentence ? 0.85 : 0.9; 
-                window.speechSynthesis.speak(utterance);
+                document.getElementById('card-front-text').style.display = 'block';
+                document.getElementById('card-back-area').style.display = 'none';
             }
         }
-        function speakCurrentWord(e) { e.stopPropagation(); if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].en, false); }
-        function speakCurrentExample(e) { e.stopPropagation(); if(wordDatabase[currentIndex]) speakWord(wordDatabase[currentIndex].ex, true); }
+
+        function nextWord() {
+            historyStack.push(currentIndex);
+            const nextIdx = Math.floor(Math.random() * words.length);
+            showWord(nextIdx);
+        }
+
+        function prevWord() {
+            if (historyStack.length > 0) {
+                const prevIdx = historyStack.pop();
+                showWord(prevIdx);
+            }
+        }
+
+        function toggleTranslation(e) {
+            e.stopPropagation();
+            const box = document.getElementById('card-translation');
+            if (box.style.display === 'none' || !box.style.display) {
+                box.innerText = "載入翻譯中...";
+                box.style.display = 'block';
+                // 使用免費 Google 翻譯 API 轉成繁體中文
+                fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(words[currentIndex].ex)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        box.innerText = data[0][0][0];
+                    })
+                    .catch(() => { box.innerText = "翻譯取得失敗。"; });
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
+        // 語音朗讀
+        function speakCurrentWord(e) {
+            e.stopPropagation();
+            speakText(words[currentIndex].en);
+        }
+
+        function speakCurrentExample(e) {
+            e.stopPropagation();
+            speakText(words[currentIndex].ex);
+        }
+
+        function speakText(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'en-US';
+            window.speechSynthesis.speak(u);
+        }
+
+        // 字典連線
+        function openDictionary(type) {
+            const word = words[currentIndex].en;
+            let url = "";
+            if (type === 'cambridge') url = `https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/${word}`;
+            if (type === 'webster') url = `https://www.merriam-webster.com/dictionary/${word}`;
+            window.open(url, '_blank');
+        }
+
+        // ---- 錯題/收藏本機制 ----
+        function toggleFavorite(e) {
+            if (e) e.stopPropagation();
+            const currentWord = words[currentIndex];
+            const existsIdx = favorites.findIndex(item => item.id === currentWord.id);
+
+            if (existsIdx > -1) {
+                favorites.splice(existsIdx, 1);
+            } else {
+                favorites.push(currentWord);
+            }
+            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+            updateFavCount();
+            updateFavHeartUI();
+        }
 
         function updateFavCount() {
             document.getElementById('fav-count').innerText = favorites.length;
         }
 
-        // --- 開啟右下角彈出筆記視窗 ---
+        function updateFavHeartUI() {
+            const currentWord = words[currentIndex];
+            const isFav = favorites.some(item => item.id === currentWord.id);
+            document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
+        }
+
+        function renderFavList() {
+            const container = document.getElementById('fav-list-container');
+            if (favorites.length === 0) {
+                container.innerHTML = `<div class="empty-fav-box">目前沒有任何錯題/收藏單字</div>`;
+                return;
+            }
+            container.innerHTML = favorites.map(w => `
+                <div class="note-card" style="flex-direction:row; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div class="note-card-title">${w.en} <span style="font-size:0.8rem; color:#64748b;">${w.pos}</span></div>
+                        <div style="font-size:0.9rem; color:#334155;">${w.ch}</div>
+                    </div>
+                    <button style="background:none; border:none; cursor:pointer; font-size:1.2rem;" onclick="removeFav(${w.id})">❌</button>
+                </div>
+            `).join('');
+        }
+
+        function removeFav(id) {
+            favorites = favorites.filter(item => item.id !== id);
+            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+            updateFavCount();
+            renderFavList();
+            updateFavHeartUI();
+        }
+
+        function clearAllFavorites() {
+            if (confirm("確定要清空所有錯題/收藏單字嗎？")) {
+                favorites = [];
+                localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+                updateFavCount();
+                renderFavList();
+                updateFavHeartUI();
+            }
+        }
+
+        // ---- 1. 一般全域四選一測驗 ----
+        function initQuiz() {
+            if (words.length < 4) return;
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('quiz-hint-box').style.display = 'none';
+
+            currentQuizWord = words[Math.floor(Math.random() * words.length)];
+            document.getElementById('quiz-question').innerText = currentQuizWord.en;
+            document.getElementById('quiz-hint-box').innerText = currentQuizWord.ex;
+
+            // 產生 3 個錯誤干擾選項
+            let options = [currentQuizWord];
+            while (options.length < 4) {
+                let randomOption = words[Math.floor(Math.random() * words.length)];
+                if (!options.some(o => o.id === randomOption.id)) {
+                    options.push(randomOption);
+                }
+            }
+            // 隨機打亂選項
+            options.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('quiz-options');
+            grid.innerHTML = options.map(opt => `
+                <button class="option-btn" onclick="checkQuizAnswer(${opt.id === currentQuizWord.id}, this)">${opt.ch}</button>
+            `).join('');
+        }
+
+        function checkQuizAnswer(isCorrect, btn) {
+            const feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                btn.style.backgroundColor = '#dcfce7';
+                btn.style.borderColor = '#22c55e';
+                feedback.style.color = '#16a34a';
+                feedback.innerText = "✨ 正確答案！";
+            } else {
+                btn.style.backgroundColor = '#fee2e2';
+                btn.style.borderColor = '#ef4444';
+                feedback.style.color = '#dc2626';
+                feedback.innerText = "❌ 答錯了！已自動幫你加入錯題本。";
+                
+                // 答錯自動加入收藏/錯題本
+                if (!favorites.some(f => f.id === currentQuizWord.id)) {
+                    favorites.push(currentQuizWord);
+                    localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+                    updateFavCount();
+                    updateFavHeartUI();
+                }
+            }
+        }
+
+        // ---- 🚀 2. 錯題/題庫複習專用測驗 (新增功能) ----
+        function initFavQuiz() {
+            const contentBlock = document.getElementById('fav-quiz-content');
+            const emptyBlock = document.getElementById('fav-quiz-empty');
+
+            // 若錯題本無單字，顯示空狀態提示
+            if (favorites.length === 0) {
+                contentBlock.style.display = 'none';
+                emptyBlock.style.display = 'block';
+                return;
+            }
+
+            contentBlock.style.display = 'flex';
+            emptyBlock.style.display = 'none';
+
+            document.getElementById('fav-feedback').innerText = '';
+            document.getElementById('fav-quiz-hint-box').style.display = 'none';
+
+            // 題目「一定」從 favorites 陣列抽
+            currentFavQuizWord = favorites[Math.floor(Math.random() * favorites.length)];
+            document.getElementById('fav-quiz-question').innerText = currentFavQuizWord.en;
+            document.getElementById('fav-quiz-hint-box').innerText = currentFavQuizWord.ex;
+
+            // 干擾選項可優先從一般題庫 words 抓取（確保湊滿 4 個選項）
+            let options = [currentFavQuizWord];
+            let pool = words.length >= 4 ? words : favorites;
+
+            while (options.length < 4 && pool.length >= 4) {
+                let randomOpt = pool[Math.floor(Math.random() * pool.length)];
+                if (!options.some(o => o.id === randomOpt.id)) {
+                    options.push(randomOpt);
+                }
+            }
+            options.sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('fav-quiz-options');
+            grid.innerHTML = options.map(opt => `
+                <button class="option-btn" onclick="checkFavQuizAnswer(${opt.id === currentFavQuizWord.id}, this)">${opt.ch}</button>
+            `).join('');
+        }
+
+        function checkFavQuizAnswer(isCorrect, btn) {
+            const feedback = document.getElementById('fav-feedback');
+            if (isCorrect) {
+                btn.style.backgroundColor = '#dcfce7';
+                btn.style.borderColor = '#22c55e';
+                feedback.style.color = '#16a34a';
+                feedback.innerText = "✨ 太棒了，錯題複習正確！";
+            } else {
+                btn.style.backgroundColor = '#fee2e2';
+                btn.style.borderColor = '#ef4444';
+                feedback.style.color = '#dc2626';
+                feedback.innerText = "❌ 還是答錯囉，繼續加油！";
+            }
+        }
+
+        // 切換提示顯示
+        function toggleQuizHint(boxId) {
+            const box = document.getElementById(boxId);
+            box.style.display = box.style.display === 'none' || !box.style.display ? 'block' : 'none';
+        }
+
+        // ---- 筆記功能與 Modal ----
         function openNoteModal(e) {
-            e.stopPropagation(); 
-            if(wordDatabase.length === 0) return;
-            const currentWord = wordDatabase[currentIndex];
-            
-            // 恢復標準編輯窗外觀
-            document.getElementById('modal-title-text').innerText = `📝 編輯【${currentWord.en}】的筆記`;
-            const inputField = document.getElementById('modal-note-input');
-            inputField.value = wordNotes[currentWord.id] || "";
-            inputField.readOnly = false;
-            
-            document.getElementById('modal-btn-group').innerHTML = `
-                <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">取消</button>
-                <button class="action-btn" onclick="saveModalNote()">儲存筆記</button>
-            `;
-            
+            if (e) e.stopPropagation();
+            const currentWord = words[currentIndex];
+            document.getElementById('modal-title-text').innerText = `📝 ${currentWord.en} 的個人筆記`;
+            document.getElementById('modal-note-input').value = notes[currentWord.id] || '';
             document.getElementById('note-modal').style.display = 'flex';
         }
 
@@ -346,349 +611,67 @@
         }
 
         function saveModalNote() {
-            const currentWord = wordDatabase[currentIndex];
-            const textValue = document.getElementById('modal-note-input').value.trim();
-            if(textValue === "") {
-                delete wordNotes[currentWord.id];
+            const currentWord = words[currentIndex];
+            const text = document.getElementById('modal-note-input').value.trim();
+            if (text) {
+                notes[currentWord.id] = text;
             } else {
-                wordNotes[currentWord.id] = textValue;
+                delete notes[currentWord.id];
             }
-            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
+            localStorage.setItem('toeic_notes', JSON.stringify(notes));
             closeNoteModal();
         }
 
-        // --- 🚀 【新功能】打包與導出包含單字資訊的完整 JSON 給 AI ---
-        function exportNotesToJSON() {
-            const notedIds = Object.keys(wordNotes);
-            if(notedIds.length === 0) {
-                alert("目前沒有任何筆記數據可以導出喔！");
-                return;
-            }
-
-            // 重組資料結構，方便未來的單字庫擴充
-            const exportData = [];
-            notedIds.forEach(id => {
-                const wordObj = wordDatabase.find(w => w.id == id);
-                exportData.push({
-                    word_id: id,
-                    word: wordObj ? wordObj.en : "Unknown",
-                    pos: wordObj ? wordObj.pos : "",
-                    ch_meaning: wordObj ? wordObj.ch : "",
-                    my_note: wordNotes[id]
-                });
-            });
-
-            // 將 JSON 字串格式化呈現
-            const jsonString = JSON.stringify(exportData, null, 2);
-            
-            // 借用同一個 Modal 視窗來顯示 JSON
-            document.getElementById('modal-title-text').innerText = "📥 請複製下方 JSON 資料給我";
-            const inputField = document.getElementById('modal-note-input');
-            inputField.value = jsonString;
-            inputField.readOnly = true; // 設定唯讀防止誤刪
-            
-            document.getElementById('modal-btn-group').innerHTML = `
-                <button class="action-btn" style="background-color:#64748b;" onclick="closeNoteModal()">關閉</button>
-                <button class="action-btn" style="background-color:#10b981;" onclick="copyJsonText()">📋 一鍵複製 JSON</button>
-            `;
-            
-            document.getElementById('note-modal').style.display = 'flex';
-        }
-
-        function copyJsonText() {
-            const inputField = document.getElementById('modal-note-input');
-            inputField.select();
-            inputField.setSelectionRange(0, 99999); // 針對手機端優化
-            navigator.clipboard.writeText(inputField.value);
-            alert("JSON 已複製到剪貼簿！下次更新題庫時，直接貼這段文字給我就行囉！ 👍");
-            closeNoteModal();
-        }
-
-        // --- 筆記大項目大頁面渲染功能 ---
-        function renderNotesPage() {
+        function renderNotesList() {
             const container = document.getElementById('notes-list-container');
-            container.innerHTML = "";
-            
-            const notedIds = Object.keys(wordNotes);
-            
-            if(notedIds.length === 0) {
-                container.innerHTML = "<p style='color:#718096; text-align:center; padding: 20px;'>目前沒有任何單字筆記喔！<br><small>可在單字卡右下角點選 📝 圖標新增。</small></p>";
+            const keys = Object.keys(notes);
+
+            if (keys.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:30px; color:#64748b;">目前還沒有任何單字筆記</div>`;
                 return;
             }
 
-            notedIds.forEach(id => {
-                const wordObj = wordDatabase.find(w => w.id == id);
-                if (!wordObj) return; 
-
-                const card = document.createElement('div');
-                card.className = 'note-card';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span class="note-card-title">${wordObj.en} <span style="font-size:0.8rem; font-weight:normal; color:#64748b;">(${wordObj.pos}) - ${wordObj.ch}</span></span>
-                        <!-- 🚀 縮寫優化：將 [🗑️ 刪除] 改為精簡的 🗑️ 鈕 -->
-                        <button class="action-btn" style="background-color:#ef4444; padding:4px 8px; font-size:0.85rem; flex-grow:0; border-radius:6px;" title="刪除筆記" onclick="deleteNoteFromPage('${id}')">🗑️</button>
-                    </div>
-                    <textarea class="note-card-textarea" rows="2" placeholder="在此處編輯你的筆記..." oninput="updateNoteFromPage('${id}', this.value)">${wordNotes[id]}</textarea>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function updateNoteFromPage(id, value) {
-            if(value.trim() === "") {
-                delete wordNotes[id];
-            } else {
-                wordNotes[id] = value;
-            }
-            localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
-        }
-
-        function deleteNoteFromPage(id) {
-            if(confirm("確定要刪除這條單字筆記嗎？")) {
-                delete wordNotes[id];
-                localStorage.setItem('toeic_notes', JSON.stringify(wordNotes));
-                renderNotesPage(); 
-            }
-        }
-
-        // --- 網路翻譯接口 ---
-        async function fetchTranslation(text) {
-            try {
-                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(text)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data && data[0]) {
-                    let translatedText = "";
-                    data[0].forEach(sentence => { if(sentence[0]) translatedText += sentence[0]; });
-                    return translatedText;
-                }
-                return "翻譯解析失敗。";
-            } catch (error) { return "網路連線異常，無法取得即時翻譯。"; }
-        }
-
-        async function toggleTranslation(e) {
-            e.stopPropagation(); 
-            const box = document.getElementById('card-translation');
-            const toggleBtn = e.target;
-            isTranslationOpen = !isTranslationOpen;
-            
-            if(isTranslationOpen) {
-                box.style.display = 'block';
-                toggleBtn.innerText = "⏳ 翻譯載入中...";
-                const currentWord = wordDatabase[currentIndex];
-                if (!currentWord.cached_translation) {
-                    currentWord.cached_translation = await fetchTranslation(currentWord.ex);
-                }
-                box.innerText = currentWord.cached_translation;
-                toggleBtn.innerText = "🙈 隱藏例句翻譯";
-            } else {
-                box.style.display = 'none';
-                toggleBtn.innerText = "👁️ 顯示例句翻譯";
-            }
-        }
-
-        function openDictionary(type) {
-            if (wordDatabase.length === 0) return;
-            const currentWord = wordDatabase[currentIndex];
-            const cleanWord = currentWord.en.trim().toLowerCase().replace(/[^a-z-]/g, '');
-            let targetUrl = type === 'cambridge' 
-                ? `https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/${cleanWord}`
-                : `https://www.merriam-webster.com/dictionary/${cleanWord}`;
-            window.open(targetUrl, "ToeicDictWindow", "width=540,height=650,top=120,left=120,resizable=yes,scrollbars=yes");
-        }
-
-        // --- 單字卡邏輯 ---
-        function updateCard() {
-            if(wordDatabase.length === 0) return;
-            const word = wordDatabase[currentIndex];
-            
-            document.getElementById('card-front-text').innerText = `${word.en} (${word.pos})`;
-            document.getElementById('card-back-en').innerText = `${word.en} (${word.pos})`;
-            document.getElementById('card-ch').innerText = word.ch;
-            document.getElementById('card-ex').innerText = `例句：${word.ex}`;
-            
-            document.getElementById('card-translation').style.display = 'none';
-            isTranslationOpen = false;
-            const toggleBtn = document.querySelector('.translation-toggle');
-            if(toggleBtn) toggleBtn.innerText = "👁️ 顯示例句翻譯";
-
-            const isFav = favorites.some(item => item.id === word.id);
-            document.getElementById('card-fav-toggle').innerText = isFav ? "❤️" : "🤍";
-            
-            document.getElementById('card-front-text').style.display = 'block';
-            document.getElementById('card-back-area').style.display = 'none';
-            isFlipped = false;
-        }
-
-        function flipCard() {
-            if (event.target.closest('.dict-section') || event.target.closest('.translation-toggle') || event.target.closest('.note-trigger-btn')) return;
-            const front = document.getElementById('card-front-text');
-            const back = document.getElementById('card-back-area');
-            if(isFlipped) {
-                front.style.display = 'block';
-                back.style.display = 'none';
-            } else {
-                front.style.display = 'none';
-                back.style.display = 'block';
-                speakWord(wordDatabase[currentIndex].en, false);
-            }
-            isFlipped = !isFlipped;
-        }
-
-        function nextWord() { 
-            if (wordDatabase.length === 0) return;
-            if (historyPointer < cardHistory.length - 1) {
-                historyPointer++;
-                currentIndex = cardHistory[historyPointer];
-            } else {
-                currentIndex = Math.floor(Math.random() * wordDatabase.length);
-                cardHistory.push(currentIndex);
-                historyPointer++;
-            }
-            updateCard(); 
-        }
-
-        function prevWord() { 
-            if (historyPointer > 0) {
-                historyPointer--;
-                currentIndex = cardHistory[historyPointer];
-                updateCard();
-            }
-        }
-
-        function toggleFavorite(e) {
-            e.stopPropagation(); 
-            const currentWord = wordDatabase[currentIndex];
-            const favIndex = favorites.findIndex(item => item.id === currentWord.id);
-            if (favIndex > -1) {
-                favorites.splice(favIndex, 1);
-            } else {
-                favorites.push(currentWord);
-            }
-            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
-            updateFavCount();
-            updateCard();
-        }
-
-        // --- 錯題本渲染 ---
-        function renderFavorites() {
-            const container = document.getElementById('fav-list-container');
-            container.innerHTML = "";
-            if(favorites.length === 0) {
-                container.innerHTML = "<p style='color:#718096; text-align:center; padding: 20px;'>目前錯題本空空如也！</p>";
-                return;
-            }
-            favorites.forEach(word => {
-                const div = document.createElement('div');
-                div.style = "padding: 14px; border-bottom: 1px solid #e2e8f0; display:flex; flex-direction:column; gap:6px; position:relative;";
-                
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:start;">
-                        <div>
-                            <strong style="color:var(--primary-color); font-size:1.1rem;">${word.en}</strong> (${word.pos})<br>
-                            <span style="color:#4a5568; font-weight:bold;">${word.ch}</span>
+            container.innerHTML = keys.map(id => {
+                const w = words.find(item => item.id == id) || { en: `單字 #${id}`, pos: '', ch: '' };
+                return `
+                    <div class="note-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="note-card-title">${w.en} <span style="font-size:0.8rem; color:#64748b;">${w.pos} ${w.ch}</span></div>
+                            <button style="background:none; border:none; cursor:pointer; font-size:1rem;" onclick="deleteNote(${id})">🗑️</button>
                         </div>
-                        <div style="display:flex; gap:6px;">
-                            <button class="action-btn" style="padding:4px 8px; background-color:#718096; flex-grow:0; font-size:0.8rem;" onclick="speakWord('${word.en}', false)">🔊</button>
-                            <!-- 🚀 縮寫優化：同樣改為精簡的 🗑️ -->
-                            <button class="action-btn" style="padding:4px 8px; background-color:#ef4444; flex-grow:0; font-size:0.8rem;" title="移除收藏" onclick="removeSingleFavorite('${word.id}')">🗑️</button>
-                        </div>
-                    </div>
-                    <div style="font-size:0.85rem; color:#64748b; background:#f1f5f9; padding:6px; border-radius:4px; word-break:break-word;">
-                        例句：${word.ex}
+                        <textarea class="note-card-textarea" rows="2" onchange="updateNoteContent(${id}, this.value)">${notes[id]}</textarea>
                     </div>
                 `;
-                container.appendChild(div);
-            });
+            }).join('');
         }
 
-        // 移除單一錯題
-        function removeSingleFavorite(wordId) {
-            favorites = favorites.filter(item => item.id != wordId);
-            localStorage.setItem('toeic_favs', JSON.stringify(favorites));
-            updateFavCount();
-            renderFavorites();
-            updateCard();
-        }
-
-        function clearAllFavorites() {
-            if(confirm("確定要清空所有錯題紀錄嗎？")) {
-                favorites = [];
-                localStorage.setItem('toeic_favs', JSON.stringify(favorites));
-                updateFavCount();
-                renderFavorites();
-                updateCard();
-            }
-        }
-
-        // --- 測驗邏輯 ---
-        function initQuiz() {
-            if(wordDatabase.length === 0) return;
-            document.getElementById('feedback').innerText = "";
-            const hintBox = document.getElementById('quiz-hint-box');
-            hintBox.style.display = 'none';
-            
-            currentQuizWord = wordDatabase[Math.floor(Math.random() * wordDatabase.length)];
-            document.getElementById('quiz-question').innerText = currentQuizWord.en;
-            speakWord(currentQuizWord.en, false);
-
-            hintBox.innerText = `📝 例句提示：\n${currentQuizWord.ex}`;
-
-            let choices = [currentQuizWord.ch];
-            while(choices.length < Math.min(4, wordDatabase.length)) {
-                let randomCh = wordDatabase[Math.floor(Math.random() * wordDatabase.length)].ch;
-                if(!choices.includes(randomCh)) choices.push(randomCh);
-            }
-            choices.sort(() => Math.random() - 0.5);
-
-            const optionsGrid = document.getElementById('quiz-options');
-            optionsGrid.innerHTML = "";
-            choices.forEach(choice => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = choice;
-                btn.onclick = () => checkAnswer(btn, choice);
-                optionsGrid.appendChild(btn);
-            });
-        }
-
-        function toggleQuizHint() {
-            const hintBox = document.getElementById('quiz-hint-box');
-            hintBox.style.display = (hintBox.style.display === 'block') ? 'none' : 'block';
-        }
-
-        function checkAnswer(selectedBtn, choice) {
-            const feedback = document.getElementById('feedback');
-            const allButtons = document.querySelectorAll('.option-btn');
-            allButtons.forEach(btn => btn.disabled = true);
-
-            if(choice === currentQuizWord.ch) {
-                feedback.innerText = "🎉 回答正確！";
-                feedback.style.color = "#10b981";
-                selectedBtn.style.backgroundColor = "#d1fae5";
-                selectedBtn.style.borderColor = "#10b981";
+        function updateNoteContent(id, value) {
+            if (value.trim()) {
+                notes[id] = value.trim();
             } else {
-                feedback.innerText = "❌ 錯題已加入錯題本。";
-                feedback.style.color = "#ef4444";
-                selectedBtn.style.backgroundColor = "#fee2e2";
-                selectedBtn.style.borderColor = "#ef4444";
-                
-                allButtons.forEach(btn => {
-                    if (btn.innerText === currentQuizWord.ch) {
-                        btn.style.backgroundColor = "#d1fae5";
-                        btn.style.borderColor = "#10b981";
-                        btn.style.color = "#065f46";
-                    }
-                });
-
-                if (!favorites.some(item => item.id === currentQuizWord.id)) {
-                    favorites.push(currentQuizWord);
-                    localStorage.setItem('toeic_favs', JSON.stringify(favorites));
-                    updateFavCount();
-                }
+                delete notes[id];
             }
+            localStorage.setItem('toeic_notes', JSON.stringify(notes));
         }
 
+        function deleteNote(id) {
+            delete notes[id];
+            localStorage.setItem('toeic_notes', JSON.stringify(notes));
+            renderNotesList();
+        }
+
+        // 匯出筆記 JSON
+        function exportNotesToJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notes, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `toeic_notes_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        // 啟動專案
         loadWords();
     </script>
 </body>
