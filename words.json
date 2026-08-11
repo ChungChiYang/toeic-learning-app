@@ -1148,7 +1148,7 @@
   { "id": 1147, "en": "annulment", "pos": "n.", "ch": "撤銷、廢除、宣告無效", "ex": "Failing to secure the regulatory licenses triggered an automatic annulment of the merger." },
   { "id": 1148, "en": "anomaly", "pos": "n.", "ch": "異常、不規則、反常事物", "ex": "The unusual spikes in server resource activity turned out to be a data logging anomaly." },
   { "id": 1149, "en": "anonymous", "pos": "adj.", "ch": "匿名的、不知名的", "ex": "Staff feedback can be submitted via an anonymous web portal to promote honest suggestions." },
-  { "id": 1150, "en": "anticipate", "pos": "v.", "ch": "預料、預期、期待", "ex": "The procurement team did anticipate the supply crunch and secured extra steel rolls early." }
+  { "id": 1150, "en": "anticipate", "pos": "v.", "ch": "預料、預期、期待", "ex": "The procurement team did anticipate the supply crunch and secured extra steel rolls early."},
   { "id": 1151, "en": "accept", "pos": "v.", "ch": "接受、同意", "ex": "Please accept our sincere apologies for the delivery delay." },
   { "id": 1152, "en": "access", "pos": "n./v.", "ch": "進入權限、存取；存取（資料）", "ex": "All new staff members need permission to access the server." },
   { "id": 1153, "en": "action", "pos": "n.", "ch": "行動、措施", "ex": "We need to take immediate action to solve the problem." },
@@ -1198,7 +1198,7 @@
   { "id": 1197, "en": "create", "pos": "v.", "ch": "創造、建立", "ex": "The graphic design team will create a new logo for us." },
   { "id": 1198, "en": "damage", "pos": "n./v.", "ch": "損害、損壞；損害", "ex": "The heavy storm caused severe damage to the roof." },
   { "id": 1199, "en": "danger", "pos": "n.", "ch": "危險", "ex": "Construction workers must wear helmets to avoid danger." },
-  { "id": 1200, "en": "decide", "pos": "v.", "ch": "決定、下定決心", "ex": "The board members will decide who gets the promotion." }
+  { "id": 1200, "en": "decide", "pos": "v.", "ch": "決定、下定決心", "ex": "The board members will decide who gets the promotion."},
   { "id": 1201, "en": "delay", "pos": "v./n.", "ch": "延誤、耽擱", "ex": "Bad weather caused a long delay for our flight." },
   { "id": 1202, "en": "deliver", "pos": "v.", "ch": "傳送、遞送", "ex": "The courier will deliver the express package before noon." },
   { "id": 1203, "en": "demand", "pos": "n./v.", "ch": "需求、要求；要求", "ex": "There is a growing demand for eco-friendly products." },
@@ -1248,7 +1248,7 @@
   { "id": 1247, "en": "goal", "pos": "n.", "ch": "目標、目的", "ex": "Our primary goal is to improve customer satisfaction this quarter." },
   { "id": 1248, "en": "group", "pos": "n.", "ch": "團隊、群組", "ex": "A group of delegates visited our solar power station today." },
   { "id": 1249, "en": "guard", "pos": "n./v.", "ch": "警衛；保衛、防守", "ex": "The security guard checked all visitors' badges at the gate." },
-  { "id": 1250, "en": "guest", "pos": "n.", "ch": "賓客、顧客", "ex": "Hotel guests can enjoy a free breakfast on the first floor." }
+  { "id": 1250, "en": "guest", "pos": "n.", "ch": "賓客、顧客", "ex": "Hotel guests can enjoy a free breakfast on the first floor."},
   { "id": 1251, "en": "guide", "pos": "n./v.", "ch": "指南、導遊；引導、指導", "ex": "Please read the user guide carefully before installing the app." },
   { "id": 1252, "en": "handle", "pos": "v./n.", "ch": "處理、應付；把手", "ex": "Our customer service team will handle your request promptly." },
   { "id": 1253, "en": "hire", "pos": "v.", "ch": "僱用、租用", "ex": "The company needs to hire three new software developers." },
@@ -1298,7 +1298,7 @@
   { "id": 1297, "en": "method", "pos": "n.", "ch": "方法、方式", "ex": "Online payment is a convenient method to settle your bill." },
   { "id": 1298, "en": "money", "pos": "n.", "ch": "金錢、錢財", "ex": "Budgeting carefully will help you save more money." },
   { "id": 1299, "en": "month", "pos": "n.", "ch": "月份", "ex": "We review our sales results at the end of every month." },
-  { "id": 1300, "en": "need", "pos": "v./n.", "ch": "需要、需求", "ex": "We need to order more printer paper before next Monday." }
+  { "id": 1300, "en": "need", "pos": "v./n.", "ch": "需要、需求", "ex": "We need to order more printer paper before next Monday."},
   { "id": 1301, "en": "network", "pos": "n./v.", "ch": "網路、人脈；建立人脈", "ex": "Our office network is undergoing maintenance this afternoon." },
   { "id": 1302, "en": "news", "pos": "n.", "ch": "新聞、消息（不可數）", "ex": "The CEO shared great news about our quarterly profits." },
   { "id": 1303, "en": "note", "pos": "n./v.", "ch": "筆記、便條；注意、記錄", "ex": "Please take careful notes during the client presentation." },
@@ -1398,7 +1398,7 @@
   { "id": 1397, "en": "stock", "pos": "n./v.", "ch": "庫存、股票；進貨", "ex": "The item is currently out of stock but will return next week." },
   { "id": 1398, "en": "store", "pos": "n./v.", "ch": "商店、門市；儲存", "ex": "Store confidential files in a secure electronic folder." },
   { "id": 1399, "en": "strategy", "pos": "n.", "ch": "策略、戰略", "ex": "Our growth strategy focuses on expanding overseas markets." },
-  { "id": 1400, "en": "success", "pos": "n.", "ch": "成功、成就", "ex": "Hard work and teamwork were key factors in our success." }
+  { "id": 1400, "en": "success", "pos": "n.", "ch": "成功、成就", "ex": "Hard work and teamwork were key factors in our success."},
   { "id": 1401, "en": "suggest", "pos": "v.", "ch": "建議、提議", "ex": "I suggest we review the financial plan one more time." },
   { "id": 1402, "en": "supply", "pos": "n./v.", "ch": "供應品、補給；提供、供應", "ex": "Our department ordered more office supplies for the month." },
   { "id": 1403, "en": "support", "pos": "v./n.", "ch": "支援、支持、贊助", "ex": "Our tech support team is available twenty-four hours a day." },
@@ -1498,7 +1498,7 @@
   { "id": 1497, "en": "arrangement", "pos": "n.", "ch": "安排、佈置", "ex": "We made all the travel arrangements for the business trip." },
   { "id": 1498, "en": "arrest", "pos": "v./n.", "ch": "逮捕、拘留", "ex": "Security officers worked with police to deal with the break-in." },
   { "id": 1499, "en": "arrival", "pos": "n.", "ch": "到達、抵達", "ex": "Please check the screen for flight arrival times." },
-  { "id": 1500, "en": "article", "pos": "n.", "ch": "文章、物品、條款", "ex": "She wrote an interesting article on digital transformation." }
+  { "id": 1500, "en": "article", "pos": "n.", "ch": "文章、物品、條款", "ex": "She wrote an interesting article on digital transformation."},
   { "id": 1501, "en": "artist", "pos": "n.", "ch": "藝術家、藝人", "ex": "The graphic artist designed a modern logo for our company." },
   { "id": 1502, "en": "ask", "pos": "v.", "ch": "詢問、要求", "ex": "Feel free to ask the receptionist for directions to the room." },
   { "id": 1503, "en": "assist", "pos": "v.", "ch": "協助、幫助", "ex": "An intern was hired to assist the team with data entry." },
@@ -1598,7 +1598,7 @@
   { "id": 1597, "en": "class", "pos": "n.", "ch": "班級、等級、階級", "ex": "He booked a business class ticket for the long overseas flight." },
   { "id": 1598, "en": "clean", "pos": "adj./v.", "ch": "乾淨的；打掃、清潔", "ex": "The maintenance staff ensures the office stays clean daily." },
   { "id": 1599, "en": "cleaner", "pos": "n.", "ch": "清潔工、清潔劑", "ex": "The cleaner empties all recycling bins every evening." },
-  { "id": 1600, "en": "climate", "pos": "n.", "ch": "氣候、局勢/風氣", "ex": "The current economic climate encourages careful corporate spending." }
+  { "id": 1600, "en": "climate", "pos": "n.", "ch": "氣候、局勢/風氣", "ex": "The current economic climate encourages careful corporate spending."},
   { "id": 1601, "en": "colleague", "pos": "n.", "ch": "同事", "ex": "I am working on this report with a colleague from marketing." },
   { "id": 1602, "en": "collect", "pos": "v.", "ch": "收集、收取", "ex": "The secretary will collect all feedback forms after the presentation." },
   { "id": 1603, "en": "collection", "pos": "n.", "ch": "收藏、聚集、系列商品", "ex": "The store unveiled its new summer clothing collection yesterday." },
@@ -1698,7 +1698,7 @@
   { "id": 1697, "en": "customer", "pos": "n.", "ch": "顧客、客戶", "ex": "The new policy aims to raise customer satisfaction levels." },
   { "id": 1698, "en": "customs", "pos": "n.", "ch": "海關、關稅", "ex": "All international luggage must pass through customs inspection." },
   { "id": 1699, "en": "cut", "pos": "v./n.", "ch": "剪、切、削減；傷口、削減", "ex": "Management plans to cut operational expenses by five percent." },
-  { "id": 1700, "en": "daily", "pos": "adj./adv./n.", "ch": "每日的；每天；日報", "ex": "The team holds a brief daily meeting at nine in the morning." }
+  { "id": 1700, "en": "daily", "pos": "adj./adv./n.", "ch": "每日的；每天；日報", "ex": "The team holds a brief daily meeting at nine in the morning."},
   { "id": 1701, "en": "damage", "pos": "n./v.", "ch": "損害、傷害", "ex": "The insurance policy covers damage caused by water leaks." },
   { "id": 1702, "en": "data", "pos": "n.", "ch": "資料、數據（複數，常作不可數）", "ex": "The marketing team analyzed user data to refine campaign strategies." },
   { "id": 1703, "en": "database", "pos": "n.", "ch": "資料庫", "ex": "All client records are safely stored in a secure cloud database." },
@@ -1798,7 +1798,7 @@
   { "id": 1797, "en": "duty", "pos": "n.", "ch": "職責、關稅", "ex": "It is the receptionist's duty to greet arriving clients warmly." },
   { "id": 1798, "en": "earnest", "pos": "adj.", "ch": "認真的、誠摯的", "ex": "The team made an earnest effort to complete the project on time." },
   { "id": 1799, "en": "earnings", "pos": "n.", "ch": "收入、盈餘（常用複數）", "ex": "The company reported impressive third-quarter financial earnings." },
-  { "id": 1800, "en": "easy", "pos": "adj.", "ch": "容易的、簡單的", "ex": "The user-friendly interface makes software navigation easy." }
+  { "id": 1800, "en": "easy", "pos": "adj.", "ch": "容易的、簡單的", "ex": "The user-friendly interface makes software navigation easy."},
   { "id": 1801, "en": "economic", "pos": "adj.", "ch": "經濟的、經濟學的", "ex": "The region is experiencing rapid economic growth this year." },
   { "id": 1802, "en": "economy", "pos": "n.", "ch": "經濟、節約", "ex": "Tourism plays a vital role in boosting the local economy." },
   { "id": 1803, "en": "edge", "pos": "n.", "ch": "邊緣、優勢", "ex": "Advanced technology gives our firm a strong competitive edge." },
@@ -1813,7 +1813,7 @@
   { "id": 1812, "en": "elect", "pos": "v.", "ch": "選舉、推選", "ex": "The board members will elect a new chairperson tomorrow." },
   { "id": 1813, "en": "election", "pos": "n.", "ch": "選舉、當選", "ex": "Results of the presidential election will be announced tonight." },
   { "id": 1814, "en": "electric", "pos": "adj.", "ch": "電動的、用電的", "ex": "All company vehicles will be replaced with electric cars." },
-  { "id": 1815, "en": "electronic", "pos": "adj.", "ch": "電子（化）的", "ex": "Customers can choose to receive electronic receipts by email." }
+  { "id": 1815, "en": "electronic", "pos": "adj.", "ch": "電子（化）的", "ex": "Customers can choose to receive electronic receipts by email."},
   { "id": 1816, "en": "element", "pos": "n.", "ch": "要素、元素", "ex": "Clear communication is a key element of effective leadership." },
   { "id": 1817, "en": "eligible", "pos": "adj.", "ch": "有資格的、合格的", "ex": "Full-time employees are eligible for health insurance benefits." },
   { "id": 1818, "en": "eliminate", "pos": "v.", "ch": "消除、排除", "ex": "The new software helps eliminate unnecessary administrative steps." },
@@ -1898,7 +1898,7 @@
   { "id": 1897, "en": "expense", "pos": "n.", "ch": "費用、開支", "ex": "Travel expenses will be reimbursed by the finance team." },
   { "id": 1898, "en": "expensive", "pos": "adj.", "ch": "昂貴的", "ex": "Renting office space in the city center is very expensive." },
   { "id": 1899, "en": "experience", "pos": "n./v.", "ch": "經驗、經歷；體驗", "ex": "Applicants should have at least two years of sales experience." },
-  { "id": 1900, "en": "experiment", "pos": "n./v.", "ch": "實驗、試驗", "ex": "Researchers are conducting an experiment on the new compound." }
+  { "id": 1900, "en": "experiment", "pos": "n./v.", "ch": "實驗、試驗", "ex": "Researchers are conducting an experiment on the new compound."},
   { "id": 1901, "en": "expert", "pos": "n./adj.", "ch": "專家、行家；專門的", "ex": "We hired a financial expert to analyze our investment risk." },
   { "id": 1902, "en": "expertise", "pos": "n.", "ch": "專業知識、專長", "ex": "Her expertise in digital marketing helped grow our online presence." },
   { "id": 1903, "en": "expire", "pos": "v.", "ch": "到期、終止", "ex": "Your passport will expire in six months, so please renew it soon." },
@@ -1948,7 +1948,7 @@
   { "id": 1947, "en": "fellow", "pos": "adj./n.", "ch": "同伴的、同事的；夥伴", "ex": "She is well-respected by her fellow researchers in the industry." },
   { "id": 1948, "en": "female", "pos": "adj./n.", "ch": "女性的、雌性的；女性", "ex": "The company actively promotes female representation in senior management." },
   { "id": 1949, "en": "fetch", "pos": "v.", "ch": "拿來、售得", "ex": "An assistant was sent to fetch the signed contract from the main office." },
-  { "id": 1950, "en": "field", "pos": "n.", "ch": "領域、田野、場地", "ex": "Dr. Kim is a renowned expert in the field of renewable energy." }
+  { "id": 1950, "en": "field", "pos": "n.", "ch": "領域、田野、場地", "ex": "Dr. Kim is a renowned expert in the field of renewable energy."},
   { "id": 1951, "en": "fight", "pos": "v./n.", "ch": "爭鬥、奮鬥；戰鬥", "ex": "The company continues to fight against illegal market competition." },
   { "id": 1952, "en": "figure", "pos": "n./v.", "ch": "數字、人物；計算、認為", "ex": "Sales figures for the fourth quarter exceed our expectations." },
   { "id": 1953, "en": "file", "pos": "n./v.", "ch": "檔案、文件；歸檔、提出", "ex": "Please file all customer invoices in alphabetical order." },
@@ -1998,7 +1998,7 @@
   { "id": 1997, "en": "full", "pos": "adj.", "ch": "滿的、完整的", "ex": "You can find a full description of the job on our careers page." },
   { "id": 1998, "en": "fully", "pos": "adv.", "ch": "充分地、完全地", "ex": "We fully support the proposed changes to the workplace policy." },
   { "id": 1999, "en": "function", "pos": "n./v.", "ch": "功能、職務、典禮；運行", "ex": "The main function of this software is data analysis." },
-  { "id": 2000, "en": "fund", "pos": "n./v.", "ch": "基金、資金；資助", "ex": "The government provided funds to support small businesses." }
+  { "id": 2000, "en": "fund", "pos": "n./v.", "ch": "基金、資金；資助", "ex": "The government provided funds to support small businesses."},
   { "id": 2001, "en": "fundamental", "pos": "adj.", "ch": "基本的、根本的", "ex": "Understanding safety guidelines is fundamental to laboratory work." },
   { "id": 2002, "en": "fundraising", "pos": "n.", "ch": "籌款、募捐", "ex": "The charitable organization hosted a successful fundraising gala." },
   { "id": 2003, "en": "furnish", "pos": "v.", "ch": "佈置、為…配備家具；提供", "ex": "The landlord agreed to furnish the apartment before the tenant moved in." },
@@ -2048,7 +2048,7 @@
   { "id": 2047, "en": "ground", "pos": "n./adj.", "ch": "地面、立場、基礎", "ex": "Construction on the new site will break ground next month." },
   { "id": 2048, "en": "group", "pos": "n./v.", "ch": "群組、集團；分組", "ex": "A focus group was formed to evaluate the product prototype." },
   { "id": 2049, "en": "grow", "pos": "v.", "ch": "成長、增加、種植", "ex": "Our client base continues to grow rapidly in North America." },
-  { "id": 2050, "en": "growth", "pos": "n.", "ch": "增長、發展", "ex": "The report highlights strong revenue growth in the third quarter." }
+  { "id": 2050, "en": "growth", "pos": "n.", "ch": "增長、發展", "ex": "The report highlights strong revenue growth in the third quarter."},
   { "id": 2051, "en": "guarantee", "pos": "v./n.", "ch": "保證、擔保；保固、承諾", "ex": "All repair work comes with a ninety-day money-back guarantee." },
   { "id": 2052, "en": "guard", "pos": "n./v.", "ch": "警衛、守衛；保衛、看守", "ex": "Security guards monitor the building entrances around the clock." },
   { "id": 2053, "en": "guess", "pos": "v./n.", "ch": "猜測、推測", "ex": "It is better to verify the data than to make a wild guess." },
@@ -2098,7 +2098,7 @@
   { "id": 2097, "en": "honest", "pos": "adj.", "ch": "誠實的、坦率的", "ex": "We value honest feedback from our clients to improve services." },
   { "id": 2098, "en": "honor", "pos": "n./v.", "ch": "榮譽、敬意；履行、給予榮譽", "ex": "The firm will honor all discount coupons presented before month end." },
   { "id": 2099, "en": "hope", "pos": "v./n.", "ch": "希望、盼望", "ex": "We hope to resolve the technical issue before the system goes live." },
-  { "id": 2100, "en": "hospitality", "pos": "n.", "ch": "款待、殷勤、餐旅業", "ex": "The region is renowned for its warm hospitality and tourism industry." }
+  { "id": 2100, "en": "hospitality", "pos": "n.", "ch": "款待、殷勤、餐旅業", "ex": "The region is renowned for its warm hospitality and tourism industry."},
   { "id": 2101, "en": "host", "pos": "n./v.", "ch": "主人、主持人、東道主；主辦、主持", "ex": "Our company will host the annual regional conference next month." },
   { "id": 2102, "en": "hotel", "pos": "n.", "ch": "飯店、旅館", "ex": "The guest speaker was accommodated in a five-star hotel downtown." },
   { "id": 2103, "en": "hour", "pos": "n.", "ch": "小時、營業時間", "ex": "Regular office hours are from nine in the morning to six in the evening." },
@@ -2148,7 +2148,7 @@
   { "id": 2147, "en": "incur", "pos": "v.", "ch": "招致、帶來、產生（費用/損失）", "ex": "Late fee payments will incur an additional finance charge." },
   { "id": 2148, "en": "indeed", "pos": "adv.", "ch": "確實、真正地", "ex": "The new marketing strategy was indeed successful in raising sales." },
   { "id": 2149, "en": "independence", "pos": "n.", "ch": "獨立、自主", "ex": "Financial independence allows firms to fund expansion projects easily." },
-  { "id": 2150, "en": "independent", "pos": "adj.", "ch": "獨立的、自主的", "ex": "An independent auditor was appointed to review financial records." }
+  { "id": 2150, "en": "independent", "pos": "adj.", "ch": "獨立的、自主的", "ex": "An independent auditor was appointed to review financial records."},
   { "id": 2151, "en": "indicate", "pos": "v.", "ch": "指出、顯示、表明", "ex": "Survey results indicate high customer satisfaction with our service." },
   { "id": 2152, "en": "indication", "pos": "n.", "ch": "指示、徵兆、跡象", "ex": "There is every indication that quarterly profits will increase." },
   { "id": 2153, "en": "indicator", "pos": "n.", "ch": "指標、指示器", "ex": "Economic indicators show a steady recovery in retail sales." },
@@ -2198,7 +2198,7 @@
   { "id": 2197, "en": "intent", "pos": "n./adj.", "ch": "意圖、目的；專注的", "ex": "The team stated their clear intent to expand overseas sales." },
   { "id": 2198, "en": "intention", "pos": "n.", "ch": "意圖、打算", "ex": "It was never our intention to delay the contract delivery." },
   { "id": 2199, "en": "interest", "pos": "n./v.", "ch": "興趣、利息、利益；使感興趣", "ex": "High interest rates have slowed down real estate investment." },
-  { "id": 2200, "en": "interested", "pos": "adj.", "ch": "感興趣的、有興趣的", "ex": "If you are interested in the job opening, please send your resume." }
+  { "id": 2200, "en": "interested", "pos": "adj.", "ch": "感興趣的、有興趣的", "ex": "If you are interested in the job opening, please send your resume."},
   { "id": 2201, "en": "interesting", "pos": "adj.", "ch": "有趣的、引人注目的", "ex": "The speaker raised several interesting points during the seminar." },
   { "id": 2202, "en": "interfere", "pos": "v.", "ch": "干涉、干擾", "ex": "Personal matters should not interfere with professional performance." },
   { "id": 2203, "en": "interior", "pos": "adj./n.", "ch": "內部的；內部、室內", "ex": "An interior designer was hired to renovate the main lobby." },
@@ -2298,7 +2298,7 @@
   { "id": 2297, "en": "lease", "pos": "n./v.", "ch": "租約、租賃期；出租、租用", "ex": "The company signed a three-year lease for the new office suite." },
   { "id": 2298, "en": "least", "pos": "adj./adv./n.", "ch": "最少的；最少地", "ex": "At least two security guards are on duty throughout the night." },
   { "id": 2299, "en": "leather", "pos": "n./adj.", "ch": "皮革；皮革製的", "ex": "The executive office chairs are upholstered in genuine leather." },
-  { "id": 2300, "en": "leave", "pos": "v./n.", "ch": "離開、留下、休假；休假", "ex": "Requests for annual leave should be submitted two weeks early." }
+  { "id": 2300, "en": "leave", "pos": "v./n.", "ch": "離開、留下、休假；休假", "ex": "Requests for annual leave should be submitted two weeks early."},
   { "id": 2301, "en": "lecture", "pos": "n./v.", "ch": "講座、演講；講課", "ex": "The professor gave an inspiring lecture on international trade." },
   { "id": 2302, "en": "lecturer", "pos": "n.", "ch": "講師、演講者", "ex": "The guest lecturer shared valuable insights into market dynamics." },
   { "id": 2303, "en": "left", "pos": "adj./adv./n.", "ch": "左邊的；向左；左邊", "ex": "Turn left at the next intersection to reach the headquarters." },
@@ -2398,7 +2398,7 @@
   { "id": 2397, "en": "manager", "pos": "n.", "ch": "經理、管理者", "ex": "Contact the project manager directly if you encounter any issues." },
   { "id": 2398, "en": "managerial", "pos": "adj.", "ch": "管理的、經理的", "ex": "He has over ten years of managerial experience in retail operations." },
   { "id": 2399, "en": "mandate", "pos": "n./v.", "ch": "授權、指令、命令；強制執行", "ex": "The new government mandate requires all offices to cut energy consumption." },
-  { "id": 2400, "en": "mandatory", "pos": "adj.", "ch": "強制的、義務的", "ex": "Attendance at tomorrow’s safety orientation session is mandatory." }
+  { "id": 2400, "en": "mandatory", "pos": "adj.", "ch": "強制的、義務的", "ex": "Attendance at tomorrow’s safety orientation session is mandatory."},
   { "id": 2401, "en": "manner", "pos": "n.", "ch": "方式、態度；禮貌（常用複數）", "ex": "All customer inquiries must be handled in a professional manner." },
   { "id": 2402, "en": "manual", "pos": "n./adj.", "ch": "手冊、指南；手動的", "ex": "Please read the instruction manual before operating the machinery." },
   { "id": 2403, "en": "manufacture", "pos": "v./n.", "ch": "製造、生產；製造業", "ex": "The plant manufactures electronic components for smartphones." },
@@ -2498,7 +2498,7 @@
   { "id": 2497, "en": "morning", "pos": "n.", "ch": "早晨、上午", "ex": "Staff meetings are held every Monday morning at nine." },
   { "id": 2498, "en": "mortgage", "pos": "n./v.", "ch": "房屋抵押貸款；抵押", "ex": "Interest rates on fixed commercial mortgages remained stable." },
   { "id": 2499, "en": "most", "pos": "adj./adv./n.", "ch": "最多的；最；大部分", "ex": "Most employees prefer flexible working hours options." },
-  { "id": 2500, "en": "mostly", "pos": "adv.", "ch": "主要地、大部分地", "ex": "Our client base consists mostly of small and medium businesses." }
+  { "id": 2500, "en": "mostly", "pos": "adv.", "ch": "主要地、大部分地", "ex": "Our client base consists mostly of small and medium businesses."},
   { "id": 2501, "en": "motion", "pos": "n./v.", "ch": "運動、移動、動議；示意", "ex": "The board approved the motion to expand international operations." },
   { "id": 2502, "en": "motivate", "pos": "v.", "ch": "激勵、驅使", "ex": "Performance bonuses are used to motivate sales representatives." },
   { "id": 2503, "en": "motivation", "pos": "n.", "ch": "動機、積極性", "ex": "High employee motivation directly impacts workplace productivity." },
@@ -2598,7 +2598,7 @@
   { "id": 2597, "en": "objection", "pos": "n.", "ch": "反對、異議", "ex": "The proposal was approved without any formal objection." },
   { "id": 2598, "en": "objective", "pos": "n./adj.", "ch": "目標、目的；客觀的", "ex": "Our primary objective is to increase customer satisfaction." },
   { "id": 2599, "en": "obligation", "pos": "n.", "ch": "義務、責任、契約約束", "ex": "Contractual obligations require delivery by the end of the month." },
-  { "id": 2600, "en": "oblige", "pos": "v.", "ch": "迫使、使負有義務、施恩惠", "ex": "Regulations oblige companies to disclose annual financial audit results." }
+  { "id": 2600, "en": "oblige", "pos": "v.", "ch": "迫使、使負有義務、施恩惠", "ex": "Regulations oblige companies to disclose annual financial audit results."},
   { "id": 2601, "en": "observation", "pos": "n.", "ch": "觀察、觀察結果", "ex": "The auditor shared several key observations during the closing meeting." },
   { "id": 2602, "en": "observe", "pos": "v.", "ch": "觀察、注意到、遵守", "ex": "All employees must observe company safety guidelines." },
   { "id": 2603, "en": "obsolete", "pos": "adj.", "ch": "淘汰的、過時的", "ex": "The old computer operating system will soon become obsolete." },
@@ -2698,7 +2698,7 @@
   { "id": 2697, "en": "own", "pos": "adj./v.", "ch": "自己的；擁有", "ex": "Each employee is responsible for maintaining their own desk area." },
   { "id": 2698, "en": "owner", "pos": "n.", "ch": "所有人、物主", "ex": "The store owner expanded operations by opening a second branch." },
   { "id": 2699, "en": "ownership", "pos": "n.", "ch": "所有權", "ex": "Transfer of vehicle ownership requires official documentation." },
-  { "id": 2700, "en": "pace", "pos": "n./v.", "ch": "步調、速度；踱步", "ex": "Technological innovation continues at a rapid pace in this sector." }
+  { "id": 2700, "en": "pace", "pos": "n./v.", "ch": "步調、速度；踱步", "ex": "Technological innovation continues at a rapid pace in this sector."},
   { "id": 2701, "en": "pack", "pos": "v./n.", "ch": "打包、裝箱；包裹、包裝", "ex": "Workers pack the ordered items carefully before shipment." },
   { "id": 2702, "en": "package", "pos": "n./v.", "ch": "包裹、方案；包裝", "ex": "The courier delivered the express package to the reception desk." },
   { "id": 2703, "en": "packaging", "pos": "n.", "ch": "包裝材料、外包裝", "ex": "Eco-friendly packaging helps reduce corporate plastic waste." },
@@ -2798,7 +2798,7 @@
   { "id": 2797, "en": "perspective", "pos": "n.", "ch": "觀點、看法、透視法", "ex": "The consultant brought a fresh perspective to our marketing plan." },
   { "id": 2798, "en": "persuade", "pos": "v.", "ch": "說服、勸說", "ex": "The presentation helped persuade investors to support our venture." },
   { "id": 2799, "en": "pertain", "pos": "v.", "ch": "關於、附屬（+ to）", "ex": "The following rules pertain to all employees working remotely." },
-  { "id": 2800, "en": "pertinent", "pos": "adj.", "ch": "相關的、切題的", "ex": "Please attach all pertinent documents to your claim form." }
+  { "id": 2800, "en": "pertinent", "pos": "adj.", "ch": "相關的、切題的", "ex": "Please attach all pertinent documents to your claim form."},
   { "id": 2801, "en": "pessimistic", "pos": "adj.", "ch": "悲觀的", "ex": "Despite a pessimistic economic forecast, retail sales remained steady." },
   { "id": 2802, "en": "pest", "pos": "n.", "ch": "害蟲、討厭的人/物", "ex": "Regular pest control inspection is required for food facilities." },
   { "id": 2803, "en": "pet", "pos": "n./adj.", "ch": "寵物；寵愛的", "ex": "Pets are not allowed inside the office premises." },
@@ -2898,7 +2898,7 @@
   { "id": 2897, "en": "postpone", "pos": "v.", "ch": "延期、推遲", "ex": "The board meeting was postponed until next Thursday afternoon." },
   { "id": 2898, "en": "pot", "pos": "n./v.", "ch": "罐、鍋、壺；放入鍋中", "ex": "Freshly brewed coffee is available in the breakroom pot." },
   { "id": 2899, "en": "potential", "pos": "adj./n.", "ch": "潛在的、可能的；潛力、潛能", "ex": "The sales team identified several potential clients during the expo." },
-  { "id": 2900, "en": "potentially", "pos": "adv.", "ch": "潛在地、可能地", "ex": "The proposed strategy could potentially increase profits by 20%." }
+  { "id": 2900, "en": "potentially", "pos": "adv.", "ch": "潛在地、可能地", "ex": "The proposed strategy could potentially increase profits by 20%."},
   { "id": 2901, "en": "poultry", "pos": "n.", "ch": "家禽、家禽肉", "ex": "All imported poultry products must meet national health standards." },
   { "id": 2902, "en": "pound", "pos": "n./v.", "ch": "磅、英鎊；猛擊、敲打", "ex": "The total weight of the package is under five pounds." },
   { "id": 2903, "en": "pour", "pos": "v.", "ch": "傾倒、倒（水）、傾瀉", "ex": "Please pour fresh water into the coffee machine reservoir." },
@@ -2998,7 +2998,7 @@
   { "id": 2997, "en": "programmer", "pos": "n.", "ch": "程式設計師", "ex": "The lead programmer fixed the software error before release." },
   { "id": 2998, "en": "programming", "pos": "n.", "ch": "程式設計、節目規劃", "ex": "Knowledge of computer programming is required for this technical role." },
   { "id": 2999, "en": "progress", "pos": "n./v.", "ch": "進步、進展；進展、向前移動", "ex": "The project manager submitted a detailed progress report today." },
-  { "id": 3000, "en": "progressive", "pos": "adj./n.", "ch": "進步的、逐步的；革新主義者", "ex": "The firm adopted a progressive policy regarding flexible work schedules." }
+  { "id": 3000, "en": "progressive", "pos": "adj./n.", "ch": "進步的、逐步的；革新主義者", "ex": "The firm adopted a progressive policy regarding flexible work schedules."},
   { "id": 3001, "en": "prohibit", "pos": "v.", "ch": "禁止、阻止", "ex": "Company rules strictly prohibit unauthorized access to client files." },
   { "id": 3002, "en": "prohibition", "pos": "n.", "ch": "禁止、禁令", "ex": "There is a strict prohibition against smoking on office premises." },
   { "id": 3003, "en": "project", "pos": "n./v.", "ch": "專案、計畫；預測、投射", "ex": "The design project was completed ahead of the scheduled deadline." },
@@ -3098,7 +3098,7 @@
   { "id": 3097, "en": "railroad", "pos": "n./v.", "ch": "鐵路；強行通過", "ex": "The freight railroad connects the industrial park with the port." },
   { "id": 3098, "en": "railway", "pos": "n.", "ch": "鐵路、鐵道", "ex": "High-speed railway service shortened travel times between major cities." },
   { "id": 3099, "en": "rain", "pos": "n./v.", "ch": "雨、下雨", "ex": "Outdoor events will move indoors in the event of heavy rain." },
-  { "id": 3100, "en": "raise", "pos": "v./n.", "ch": "籌集（資金）、提高、舉起、提出；加薪", "ex": "The company plans to raise capital through a new share offering." }
+  { "id": 3100, "en": "raise", "pos": "v./n.", "ch": "籌集（資金）、提高、舉起、提出；加薪", "ex": "The company plans to raise capital through a new share offering."},
   { "id": 3101, "en": "rally", "pos": "n./v.", "ch": "集會、造勢大會；團結、止跌回升", "ex": "Market analysts noted a strong rally in tech stocks late in the afternoon." },
   { "id": 3102, "en": "ramification", "pos": "n.", "ch": "衍生影響、後果", "ex": "Management must consider the legal ramifications of contract changes." },
   { "id": 3103, "en": "ramp", "pos": "n./v.", "ch": "斜坡、匝道；增加、拉升", "ex": "The facility features a wheelchair ramp near the main entrance." },
@@ -3198,7 +3198,7 @@
   { "id": 3197, "en": "refrigerator", "pos": "n.", "ch": "冰箱", "ex": "Store perishable food items inside the staff room refrigerator." },
   { "id": 3198, "en": "refund", "pos": "n./v.", "ch": "退款；退還", "ex": "Customers can request a full refund within thirty days of purchase." },
   { "id": 3199, "en": "refurbish", "pos": "v.", "ch": "翻修、整修", "ex": "The hotel owner invested capital to refurbish guest rooms." },
-  { "id": 3200, "en": "refusal", "pos": "n.", "ch": "拒絕", "ex": "The applicant received a polite refusal letter from human resources." }
+  { "id": 3200, "en": "refusal", "pos": "n.", "ch": "拒絕", "ex": "The applicant received a polite refusal letter from human resources."},
   { "id": 3201, "en": "refuse", "pos": "v./n.", "ch": "拒絕；廢棄物、垃圾", "ex": "The management reserves the right to refuse unauthorized entries." },
   { "id": 3202, "en": "regard", "pos": "v./n.", "ch": "看待、視為；關心、問候", "ex": "Please send my warmest regards to the conference committee." },
   { "id": 3203, "en": "regarding", "pos": "prep.", "ch": "關於、至於", "ex": "I am writing to inquire regarding the job opening in sales." },
@@ -3298,7 +3298,7 @@
   { "id": 3297, "en": "reserve", "pos": "adj.", "ch": "備用的、預備的", "ex": "Keep reserve fuel tanks filled for emergency equipment operation." },
   { "id": 3298, "en": "reservoir", "pos": "n.", "ch": "水庫、蓄水池、儲備", "ex": "Water levels in the main city reservoir remain stable." },
   { "id": 3299, "en": "reside", "pos": "v.", "ch": "居住、定居", "ex": "Applicants must reside within the regional service area." },
-  { "id": 3300, "en": "residence", "pos": "n.", "ch": "住宅、居住地、居留權", "ex": "Proof of permanent residence is required for passport registration." }
+  { "id": 3300, "en": "residence", "pos": "n.", "ch": "住宅、居住地、居留權", "ex": "Proof of permanent residence is required for passport registration."},
   { "id": 3301, "en": "resident", "pos": "n./adj.", "ch": "居民、住戶；居住的", "ex": "Local residents voiced concerns regarding increased neighborhood traffic." },
   { "id": 3302, "en": "residential", "pos": "adj.", "ch": "住宅的、居住區的", "ex": "The real estate firm specializes in residential property sales." },
   { "id": 3303, "en": "residual", "pos": "adj./n.", "ch": "殘餘的、剩餘的；殘餘物", "ex": "Equipment residual value was assessed prior to asset liquidation." },
@@ -3398,7 +3398,7 @@
   { "id": 3397, "en": "rock", "pos": "n./v.", "ch": "岩石、搖滾樂；搖晃、震撼", "ex": "Geologists analyzed rock samples collected from the site." },
   { "id": 3398, "en": "rocket", "pos": "n./v.", "ch": "火箭；飛漲、急升", "ex": "Property prices rocketed following the announcement of transit lines." },
   { "id": 3399, "en": "rod", "pos": "n.", "ch": "棒、桿、鐵條", "ex": "Steel rods are used to reinforce concrete building structures." },
-  { "id": 3400, "en": "role", "pos": "n.", "ch": "角色、職責、作用", "ex": "Effective communication plays an essential role in teamwork." }
+  { "id": 3400, "en": "role", "pos": "n.", "ch": "角色、職責、作用", "ex": "Effective communication plays an essential role in teamwork."},
   { "id": 3401, "en": "roll", "pos": "v./n.", "ch": "滾動、捲、翻滾；一卷、名冊", "ex": "Please review the attendance roll at the beginning of the seminar." },
   { "id": 3402, "en": "romance", "pos": "n.", "ch": "浪漫、浪漫故事", "ex": "The novel combines elements of suspense and romance." },
   { "id": 3403, "en": "romantic", "pos": "adj.", "ch": "浪漫的、理想化的", "ex": "The coastal city is a popular venue for romantic weekend getaways." },
@@ -3498,7 +3498,7 @@
   { "id": 3497, "en": "scalp", "pos": "n./v.", "ch": "頭皮；轉賣（票券）", "ex": "Scalping event tickets above face value is illegal in this state." },
   { "id": 3498, "en": "scan", "pos": "v./n.", "ch": "掃描、細看、瀏覽；掃描", "ex": "Please scan the barcode on the package to track shipment status." },
   { "id": 3499, "en": "scanner", "pos": "n.", "ch": "掃描器", "ex": "Use the high-speed scanner to digitize paper document archives." },
-  { "id": 3500, "en": "scandal", "pos": "n.", "ch": "醜聞、波瀾", "ex": "The corporate corruption scandal led to immediate executive resignations." }
+  { "id": 3500, "en": "scandal", "pos": "n.", "ch": "醜聞、波瀾", "ex": "The corporate corruption scandal led to immediate executive resignations."},
   { "id": 3501, "en": "scant", "pos": "adj.", "ch": "不足的、貧乏的", "ex": "There was scant evidence to support the claim in the report." },
   { "id": 3502, "en": "scarce", "pos": "adj.", "ch": "缺乏的、稀少難得的", "ex": "Skilled workers remain scarce in the technology manufacturing sector." },
   { "id": 3503, "en": "scarcely", "pos": "adv.", "ch": "幾乎不、簡直沒有", "ex": "He had scarcely entered the office when the phone started ringing." },
@@ -3598,7 +3598,7 @@
   { "id": 3597, "en": "sentence", "pos": "n./v.", "ch": "句子、判決；宣判、判刑", "ex": "Ensure every sentence in the report is clear and grammatically correct." },
   { "id": 3598, "en": "sentiment", "pos": "n.", "ch": "情緒、感情、看法", "ex": "Consumer sentiment improved following positive economic indicators." },
   { "id": 3599, "en": "separate", "pos": "adj./v.", "ch": "分開的、個別的；分開、隔離", "ex": "Keep personal and corporate expenses in separate bank accounts." },
-  { "id": 3600, "en": "separately", "pos": "adv.", "ch": "分別地、單獨地", "ex": "Shipping charges and local taxes are calculated separately on invoices." }
+  { "id": 3600, "en": "separately", "pos": "adv.", "ch": "分別地、單獨地", "ex": "Shipping charges and local taxes are calculated separately on invoices."},
   { "id": 3601, "en": "separation", "pos": "n.", "ch": "分開、分離、分居", "ex": "Clear separation of duties prevents conflicts of interest." },
   { "id": 3602, "en": "sequence", "pos": "n./v.", "ch": "順序、序列；按順序排列", "ex": "Follow the correct sequence of steps to assemble the product." },
   { "id": 3603, "en": "serene", "pos": "adj.", "ch": "平靜的、寧靜的", "ex": "The seaside resort offers a serene environment for relaxation." },
@@ -3698,7 +3698,7 @@
   { "id": 3697, "en": "significantly", "pos": "adv.", "ch": "顯著地、相當地", "ex": "Sales increased significantly after the launching of new products." },
   { "id": 3698, "en": "signify", "pos": "v.", "ch": "表示、意味著、表明", "ex": "A flashing red light signifies that the system needs maintenance." },
   { "id": 3699, "en": "silence", "pos": "n./v.", "ch": "寂靜、沉默；使安靜", "ex": "Please silence mobile phones during official presentations." },
-  { "id": 3700, "en": "silent", "pos": "adj.", "ch": "安靜的、無聲的", "ex": "Set devices to silent mode when entering the library area." }
+  { "id": 3700, "en": "silent", "pos": "adj.", "ch": "安靜的、無聲的", "ex": "Set devices to silent mode when entering the library area."},
   { "id": 3701, "en": "silicon", "pos": "n.", "ch": "矽", "ex": "Silicon is a fundamental material used in semiconductor manufacturing." },
   { "id": 3702, "en": "silk", "pos": "n.", "ch": "絲綢、絲織品", "ex": "The boutique specializes in high-end silk ties and scarves." },
   { "id": 3703, "en": "silly", "pos": "adj.", "ch": "愚蠢的、可笑的", "ex": "Avoid making silly errors on the financial accounting reports." },
@@ -3798,7 +3798,7 @@
   { "id": 3797, "en": "sofa", "pos": "n.", "ch": "沙發", "ex": "The executive lounge is furnished with comfortable leather sofas." },
   { "id": 3798, "en": "soft", "pos": "adj.", "ch": "柔軟的、柔和的", "ex": "Soft lighting in the hotel lobby creates a welcoming atmosphere." },
   { "id": 3799, "en": "soften", "pos": "v.", "ch": "變軟、軟化、緩和", "ex": "Central banks may soften interest rates to encourage economic growth." },
-  { "id": 3800, "en": "software", "pos": "n.", "ch": "軟體", "ex": "Install the latest software update to protect against security risks." }
+  { "id": 3800, "en": "software", "pos": "n.", "ch": "軟體", "ex": "Install the latest software update to protect against security risks."},
   { "id": 3801, "en": "soil", "pos": "n./v.", "ch": "土壤、泥土；弄髒", "ex": "Agricultural experts tested the soil quality before planting." },
   { "id": 3802, "en": "solar", "pos": "adj.", "ch": "太陽的、太陽能的", "ex": "The factory installed solar panels to reduce electricity expenses." },
   { "id": 3803, "en": "soldier", "pos": "n.", "ch": "士兵、軍人", "ex": "The veteran officer served as a soldier for over twenty years." },
@@ -3898,7 +3898,7 @@
   { "id": 3897, "en": "sponsorship", "pos": "n.", "ch": "贊助、資助", "ex": "Securing corporate sponsorship helps offset event organizing costs." },
   { "id": 3898, "en": "spontaneous", "pos": "adj.", "ch": "自發的、自然產生的", "ex": "The presentation was followed by spontaneous applause from guests." },
   { "id": 3899, "en": "spoon", "pos": "n./v.", "ch": "湯匙；用匙舀", "ex": "Provide clean cutlery including forks, knives, and spoons in the pantry." },
-  { "id": 3900, "en": "sport", "pos": "n./v.", "ch": "運動、體育活動；展示", "ex": "The facility features modern sports equipment for employee wellness." }
+  { "id": 3900, "en": "sport", "pos": "n./v.", "ch": "運動、體育活動；展示", "ex": "The facility features modern sports equipment for employee wellness."},
   { "id": 3901, "en": "sportsman", "pos": "n.", "ch": "運動員、有運動員精神的人", "ex": "The professional sportsman signed an endorsement contract with the footwear brand." },
   { "id": 3902, "en": "spot", "pos": "n./v./adj.", "ch": "地點、斑點、插播廣告；發現、看見；現場的", "ex": "Inspectors spotted a minor defect during the quality control check." },
   { "id": 3903, "en": "spotlight", "pos": "n./v.", "ch": "聚光燈、大眾關注；突出顯示、聚焦", "ex": "The keynote presentation put a spotlight on renewable energy solutions." },
@@ -3998,5 +3998,5 @@
   { "id": 3997, "en": "stitch", "pos": "n./v.", "ch": "針腳、縫線；縫合", "ex": "Garment factory workers check every stitch for product quality." },
   { "id": 3998, "en": "stock", "pos": "n./v./adj.", "ch": "庫存、股票；進貨；現貨的、標準的", "ex": "Check the inventory system to verify current item stock levels." },
   { "id": 3999, "en": "stockholder", "pos": "n.", "ch": "股東", "ex": "Stockholders voted to approve the merger during the annual meeting." },
-  { "id": 4000, "en": "stocking", "pos": "n.", "ch": "長襪", "ex": "Textile exporters manufacture sheer nylon stockings for global markets." }
+  { "id": 4000, "en": "stocking", "pos": "n.", "ch": "長襪", "ex": "Textile exporters manufacture sheer nylon stockings for global markets."},
 ]
