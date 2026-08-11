@@ -114,8 +114,12 @@
         .click-hint { font-size: 0.8rem; opacity: 0.6; animation: pulse 2s infinite; margin-top: 15px; user-select: none; }
         @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 0.8; } 100% { opacity: 0.4; } }
 
-        /* 測驗 */
-        .quiz-word { font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #1e293b; }
+        /* 測驗樣式加強可點擊感 */
+        .quiz-word { 
+            font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #1e293b; 
+            cursor: pointer; user-select: none; transition: transform 0.1s;
+        }
+        .quiz-word:active { transform: scale(0.96); }
         .options-grid { display: grid; gap: 12px; }
         .option-btn {
             padding: 14px; border: 2px solid #e2e8f0; background: white;
@@ -138,7 +142,7 @@
         .modal-content {
             background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
         }
-        .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align- its: center;}
+        .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;}
         .modal-textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; box-sizing: border-box; font-size: 0.95rem; resize: none; margin-bottom: 15px; }
 
         /* 筆記大項目清單樣式 */
@@ -215,7 +219,7 @@
 
         <!-- 2. 全域四選一測驗分頁 -->
         <div id="quiz-panel" class="panel">
-            <div class="quiz-word" id="quiz-question">Question</div>
+            <div class="quiz-word" id="quiz-question" onclick="speakQuizWord('quiz')" title="點擊收聽發音">Question 🔊</div>
             <div class="options-grid" id="quiz-options"></div>
             <div id="feedback" class="feedback-text"></div>
             
@@ -232,7 +236,7 @@
             <div id="fav-quiz-content" style="display:flex; flex-direction:column; flex-grow:1; justify-content:space-between;">
                 <div>
                     <div style="font-size: 0.85rem; color: #64748b; text-align: center; margin-bottom: 5px;">🎯 錯題本強化特訓區</div>
-                    <div class="quiz-word" id="fav-quiz-question">Question</div>
+                    <div class="quiz-word" id="fav-quiz-question" onclick="speakQuizWord('fav')" title="點擊收聽發音">Question 🔊</div>
                     <div class="options-grid" id="fav-quiz-options"></div>
                     <div id="fav-feedback" class="feedback-text"></div>
                     
@@ -391,15 +395,24 @@
             }
         }
 
-        // 語音朗讀
+        // 語音朗讀核心函數
         function speakCurrentWord(e) {
-            e.stopPropagation();
+            if (e) e.stopPropagation();
             speakText(words[currentIndex].en);
         }
 
         function speakCurrentExample(e) {
-            e.stopPropagation();
+            if (e) e.stopPropagation();
             speakText(words[currentIndex].ex);
+        }
+
+        // 🚀 測驗發音（點擊題目單字即可重複收聽）
+        function speakQuizWord(type) {
+            if (type === 'quiz' && currentQuizWord) {
+                speakText(currentQuizWord.en);
+            } else if (type === 'fav' && currentFavQuizWord) {
+                speakText(currentFavQuizWord.en);
+            }
         }
 
         function speakText(text) {
@@ -486,8 +499,11 @@
             document.getElementById('quiz-hint-box').style.display = 'none';
 
             currentQuizWord = words[Math.floor(Math.random() * words.length)];
-            document.getElementById('quiz-question').innerText = currentQuizWord.en;
+            document.getElementById('quiz-question').innerText = `${currentQuizWord.en} 🔊`;
             document.getElementById('quiz-hint-box').innerText = currentQuizWord.ex;
+
+            // 🚀 題庫出現時自動朗讀
+            speakText(currentQuizWord.en);
 
             let options = [currentQuizWord];
             while (options.length < 4) {
@@ -522,8 +538,11 @@
             document.getElementById('fav-quiz-hint-box').style.display = 'none';
 
             currentFavQuizWord = favorites[Math.floor(Math.random() * favorites.length)];
-            document.getElementById('fav-quiz-question').innerText = currentFavQuizWord.en;
+            document.getElementById('fav-quiz-question').innerText = `${currentFavQuizWord.en} 🔊`;
             document.getElementById('fav-quiz-hint-box').innerText = currentFavQuizWord.ex;
+
+            // 🚀 錯題題庫出現時自動朗讀
+            speakText(currentFavQuizWord.en);
 
             let options = [currentFavQuizWord];
             let pool = words.length >= 4 ? words : favorites;
@@ -542,12 +561,11 @@
             `).join('');
         }
 
-        // 🚀 通用答案對錯判定（附帶高亮正確選項與文字提示）
+        // 通用答案對錯判定
         function checkQuizAnswer(isCorrect, btn, optionsContainerId, feedbackId, targetWord) {
             const feedback = document.getElementById(feedbackId);
             const container = document.getElementById(optionsContainerId);
             
-            // 停用所有選項點擊，防止重複選取
             container.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
 
             if (isCorrect) {
@@ -559,7 +577,6 @@
                 btn.style.backgroundColor = '#fee2e2';
                 btn.style.borderColor = '#ef4444';
                 
-                // 自動找出正解選項按鈕並標示為綠色
                 const correctBtn = container.querySelector(`[data-id="${targetWord.id}"]`);
                 if (correctBtn) {
                     correctBtn.style.backgroundColor = '#dcfce7';
@@ -569,7 +586,6 @@
                 feedback.style.color = '#dc2626';
                 feedback.innerHTML = `❌ 答錯了！<br>正確答案是：<strong>${targetWord.en}</strong> (${targetWord.pos} ${targetWord.ch})`;
 
-                // 答錯時自動納入錯題本
                 if (!favorites.some(f => f.id === targetWord.id)) {
                     favorites.push(targetWord);
                     localStorage.setItem('toeic_favs', JSON.stringify(favorites));
