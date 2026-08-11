@@ -120,6 +120,7 @@
         .option-btn {
             padding: 14px; border: 2px solid #e2e8f0; background: white;
             border-radius: 8px; cursor: pointer; font-size: 1rem; text-align: left; font-weight: 500; color: #334155;
+            transition: all 0.2s;
         }
         .quiz-hint-btn {
             background: none; border: 1px dashed #94a3b8; color: #64748b; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; margin-top: 15px; align-self: center;
@@ -127,7 +128,7 @@
         .quiz-hint-box { display: none; background: #f8fafc; border-left: 3px solid #94a3b8; padding: 12px; border-radius: 6px; font-size: 0.95rem; margin-top: 10px; text-align: left; }
         .ctrl-btns { display: flex; justify-content: space-between; margin-top: 25px; gap: 15px; }
         .action-btn { padding: 12px 24px; border: none; background-color: var(--secondary-color); color: white; border-radius: 8px; cursor: pointer; font-weight: bold; flex-grow: 1; text-align: center; }
-        .feedback-text { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1.1rem; min-height: 24px; }
+        .feedback-text { text-align: center; font-weight: bold; margin-top: 15px; font-size: 1rem; line-height: 1.4; min-height: 24px; }
 
         /* 彈出式小窗浮動層 */
         .modal-overlay {
@@ -137,7 +138,7 @@
         .modal-content {
             background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
         }
-        .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align-items: center;}
+        .modal-header { font-weight: bold; margin-bottom: 10px; color: #1e293b; display: flex; justify-content: space-between; align- its: center;}
         .modal-textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px; box-sizing: border-box; font-size: 0.95rem; resize: none; margin-bottom: 15px; }
 
         /* 筆記大項目清單樣式 */
@@ -151,12 +152,8 @@
         }
         
         /* 錯題本空狀態提醒 */
-        .empty-fav-box {
-            text-align: center; padding: 40px 20px; color: #64748b;
-        }
-        .empty-fav-box button {
-            margin-top: 15px; background-color: var(--primary-color);
-        }
+        .empty-fav-box { text-align: center; padding: 40px 20px; color: #64748b; }
+        .empty-fav-box button { margin-top: 15px; background-color: var(--primary-color); }
     </style>
 </head>
 <body>
@@ -169,7 +166,6 @@
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('card-panel')">單字翻卡</button>
         <button class="tab-btn" onclick="switchTab('quiz-panel')">四選一測驗</button>
-        <!-- 🚀 新增的分頁按鈕 -->
         <button class="tab-btn" onclick="switchTab('fav-quiz-panel')">🎯錯題/題庫複習</button>
         <button class="tab-btn" onclick="switchTab('fav-panel')">錯題/收藏本 (<span id="fav-count">0</span>)</button>
         <button class="tab-btn" onclick="switchTab('notes-panel')">📝筆記本</button>
@@ -200,7 +196,7 @@
                         <div class="translation-box" id="card-translation" onclick="event.stopPropagation()"></div>
 
                         <div class="dict-section" onclick="event.stopPropagation()">
-                            <div class="dict-title">📖 延伸學商務英文：權威字典即時查</div>
+                            <div class="dict-title">📖 權威字典即時查</div>
                             <div class="dict-btn-group">
                                 <button class="dict-btn" onclick="openDictionary('cambridge')">Cambridge 劍橋</button>
                                 <button class="dict-btn" onclick="openDictionary('webster')">Webster 韋氏</button>
@@ -231,7 +227,7 @@
             </div>
         </div>
 
-        <!-- 🚀 3. 【新功能】錯題/題庫複習專用測驗分頁 -->
+        <!-- 3. 錯題/題庫複習專用測驗分頁 -->
         <div id="fav-quiz-panel" class="panel">
             <div id="fav-quiz-content" style="display:flex; flex-direction:column; flex-grow:1; justify-content:space-between;">
                 <div>
@@ -326,14 +322,13 @@
             
             document.getElementById(tabId).classList.add('active');
             
-            // 找到對應按鈕加上 active 效果
             const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
             if(activeBtn) activeBtn.classList.add('active');
 
             if (tabId === 'fav-panel') renderFavList();
             if (tabId === 'notes-panel') renderNotesList();
             if (tabId === 'quiz-panel') initQuiz();
-            if (tabId === 'fav-quiz-panel') initFavQuiz(); // 切換到錯題測驗時初始化
+            if (tabId === 'fav-quiz-panel') initFavQuiz();
         }
 
         // ---- 單字卡模組 ----
@@ -385,7 +380,6 @@
             if (box.style.display === 'none' || !box.style.display) {
                 box.innerText = "載入翻譯中...";
                 box.style.display = 'block';
-                // 使用免費 Google 翻譯 API 轉成繁體中文
                 fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-TW&dt=t&q=${encodeURIComponent(words[currentIndex].ex)}`)
                     .then(res => res.json())
                     .then(data => {
@@ -462,7 +456,7 @@
                         <div class="note-card-title">${w.en} <span style="font-size:0.8rem; color:#64748b;">${w.pos}</span></div>
                         <div style="font-size:0.9rem; color:#334155;">${w.ch}</div>
                     </div>
-                    <button style="background:none; border:none; cursor:pointer; font-size:1.2rem;" onclick="removeFav(${w.id})">❌</button>
+                    <button style="background:none; border:none; cursor:pointer; font-size:1.2rem;" onclick="removeFav(${w.id})">🗑️</button>
                 </div>
             `).join('');
         }
@@ -495,7 +489,6 @@
             document.getElementById('quiz-question').innerText = currentQuizWord.en;
             document.getElementById('quiz-hint-box').innerText = currentQuizWord.ex;
 
-            // 產生 3 個錯誤干擾選項
             let options = [currentQuizWord];
             while (options.length < 4) {
                 let randomOption = words[Math.floor(Math.random() * words.length)];
@@ -503,44 +496,19 @@
                     options.push(randomOption);
                 }
             }
-            // 隨機打亂選項
             options.sort(() => Math.random() - 0.5);
 
             const grid = document.getElementById('quiz-options');
             grid.innerHTML = options.map(opt => `
-                <button class="option-btn" onclick="checkQuizAnswer(${opt.id === currentQuizWord.id}, this)">${opt.ch}</button>
+                <button class="option-btn" data-id="${opt.id}" onclick="checkQuizAnswer(${opt.id === currentQuizWord.id}, this, 'quiz-options', 'feedback', currentQuizWord)">${opt.ch}</button>
             `).join('');
         }
 
-        function checkQuizAnswer(isCorrect, btn) {
-            const feedback = document.getElementById('feedback');
-            if (isCorrect) {
-                btn.style.backgroundColor = '#dcfce7';
-                btn.style.borderColor = '#22c55e';
-                feedback.style.color = '#16a34a';
-                feedback.innerText = "✨ 正確答案！";
-            } else {
-                btn.style.backgroundColor = '#fee2e2';
-                btn.style.borderColor = '#ef4444';
-                feedback.style.color = '#dc2626';
-                feedback.innerText = "❌ 答錯了！已自動幫你加入錯題本。";
-                
-                // 答錯自動加入收藏/錯題本
-                if (!favorites.some(f => f.id === currentQuizWord.id)) {
-                    favorites.push(currentQuizWord);
-                    localStorage.setItem('toeic_favs', JSON.stringify(favorites));
-                    updateFavCount();
-                    updateFavHeartUI();
-                }
-            }
-        }
-
-        // ---- 🚀 2. 錯題/題庫複習專用測驗 (新增功能) ----
+        // ---- 2. 錯題/題庫複習專用測驗 ----
         function initFavQuiz() {
             const contentBlock = document.getElementById('fav-quiz-content');
             const emptyBlock = document.getElementById('fav-quiz-empty');
 
-            // 若錯題本無單字，顯示空狀態提示
             if (favorites.length === 0) {
                 contentBlock.style.display = 'none';
                 emptyBlock.style.display = 'block';
@@ -553,12 +521,10 @@
             document.getElementById('fav-feedback').innerText = '';
             document.getElementById('fav-quiz-hint-box').style.display = 'none';
 
-            // 題目「一定」從 favorites 陣列抽
             currentFavQuizWord = favorites[Math.floor(Math.random() * favorites.length)];
             document.getElementById('fav-quiz-question').innerText = currentFavQuizWord.en;
             document.getElementById('fav-quiz-hint-box').innerText = currentFavQuizWord.ex;
 
-            // 干擾選項可優先從一般題庫 words 抓取（確保湊滿 4 個選項）
             let options = [currentFavQuizWord];
             let pool = words.length >= 4 ? words : favorites;
 
@@ -572,22 +538,44 @@
 
             const grid = document.getElementById('fav-quiz-options');
             grid.innerHTML = options.map(opt => `
-                <button class="option-btn" onclick="checkFavQuizAnswer(${opt.id === currentFavQuizWord.id}, this)">${opt.ch}</button>
+                <button class="option-btn" data-id="${opt.id}" onclick="checkQuizAnswer(${opt.id === currentFavQuizWord.id}, this, 'fav-quiz-options', 'fav-feedback', currentFavQuizWord)">${opt.ch}</button>
             `).join('');
         }
 
-        function checkFavQuizAnswer(isCorrect, btn) {
-            const feedback = document.getElementById('fav-feedback');
+        // 🚀 通用答案對錯判定（附帶高亮正確選項與文字提示）
+        function checkQuizAnswer(isCorrect, btn, optionsContainerId, feedbackId, targetWord) {
+            const feedback = document.getElementById(feedbackId);
+            const container = document.getElementById(optionsContainerId);
+            
+            // 停用所有選項點擊，防止重複選取
+            container.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+
             if (isCorrect) {
                 btn.style.backgroundColor = '#dcfce7';
                 btn.style.borderColor = '#22c55e';
                 feedback.style.color = '#16a34a';
-                feedback.innerText = "✨ 太棒了，錯題複習正確！";
+                feedback.innerText = "✨ 正確答案！太棒了！";
             } else {
                 btn.style.backgroundColor = '#fee2e2';
                 btn.style.borderColor = '#ef4444';
+                
+                // 自動找出正解選項按鈕並標示為綠色
+                const correctBtn = container.querySelector(`[data-id="${targetWord.id}"]`);
+                if (correctBtn) {
+                    correctBtn.style.backgroundColor = '#dcfce7';
+                    correctBtn.style.borderColor = '#22c55e';
+                }
+
                 feedback.style.color = '#dc2626';
-                feedback.innerText = "❌ 還是答錯囉，繼續加油！";
+                feedback.innerHTML = `❌ 答錯了！<br>正確答案是：<strong>${targetWord.en}</strong> (${targetWord.pos} ${targetWord.ch})`;
+
+                // 答錯時自動納入錯題本
+                if (!favorites.some(f => f.id === targetWord.id)) {
+                    favorites.push(targetWord);
+                    localStorage.setItem('toeic_favs', JSON.stringify(favorites));
+                    updateFavCount();
+                    updateFavHeartUI();
+                }
             }
         }
 
