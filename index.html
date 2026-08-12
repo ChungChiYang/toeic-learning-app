@@ -173,6 +173,7 @@
         <button class="tab-btn" onclick="switchTab('fav-quiz-panel')">🎯錯題/題庫複習</button>
         <button class="tab-btn" onclick="switchTab('fav-panel')">錯題/收藏本 (<span id="fav-count">0</span>)</button>
         <button class="tab-btn" onclick="switchTab('notes-panel')">📝筆記本</button>
+        <button class="tab-btn" onclick="switchTab('prefix-panel')">🔤 常見字首表</button>
     </div>
 
     <div class="container">
@@ -271,6 +272,18 @@
             </div>
             <div id="notes-list-container" style="max-height: 560px; overflow-y: auto; margin-bottom: 15px;"></div>
         </div>
+
+        <!-- 6. 新增：常見字首清單分頁 -->
+        <div id="prefix-panel" class="panel">
+            <div style="margin-bottom: 15px;">
+                <h3 style="margin: 0 0 5px 0; color: #1e293b;">💡 TOEIC 核心字首拆解表</h3>
+                <p style="margin: 0; font-size: 0.85rem; color: #64748b;">掌握常見字首能大幅提升推測生字字義與準備多益的效率！</p>
+            </div>
+            
+            <div id="prefix-list-container" style="max-height: 560px; overflow-y: auto; display: grid; gap: 10px;">
+                <!-- 由 JavaScript 自動渲染 -->
+            </div>
+        </div>
     </div>
 
     <!-- 彈出式隨手筆記小視窗 -->
@@ -300,6 +313,20 @@
 
         let currentQuizWord = null;
         let currentFavQuizWord = null;
+
+        // 常見多益字首資料庫
+        const prefixData = [
+            { prefix: "re-", meaning: "再次、重新、向後", example: "renew (更新), relocate (搬遷), refund (退款)" },
+            { prefix: "pro-", meaning: "向前、支持、贊成", example: "promote (晉升/推廣), proceed (繼續進行), propose (提議)" },
+            { prefix: "sub-", meaning: "在...之下、次要的", example: "subscribe (訂閱), subordinate (下屬), submit (提交)" },
+            { prefix: "com- / con- / col-", meaning: "共同、一起、完全", example: "confirm (確認), collaborate (合作), comply (順從)" },
+            { prefix: "de-", meaning: "向下、降低、去除", example: "decrease (減少), decline (下降/拒絕), deduct (扣除)" },
+            { prefix: "in- / im- / un- / dis-", meaning: "不、否定、相反", example: "incomplete (未完成的), impossible (不可能的), dismiss (解僱)" },
+            { prefix: "inter-", meaning: "在...之間、相互", example: "international (國際的), interaction (互動), interrupt (打斷)" },
+            { prefix: "trans-", meaning: "穿過、轉移、改變", example: "transfer (轉移/轉帳), transport (運輸), transform (轉型)" },
+            { prefix: "pre-", meaning: "在...之前、預先", example: "predict (預測), prevent (預防), precaution (預防措施)" },
+            { prefix: "ex-", meaning: "向外、超出、前任", example: "expand (擴展), exceed (超過), export (出口)" }
+        ];
 
         // 初始化
         async function loadWords() {
@@ -333,6 +360,7 @@
             if (tabId === 'notes-panel') renderNotesList();
             if (tabId === 'quiz-panel') initQuiz();
             if (tabId === 'fav-quiz-panel') initFavQuiz();
+            if (tabId === 'prefix-panel') renderPrefixList();
         }
 
         // ---- 單字卡模組 ----
@@ -395,7 +423,7 @@
             }
         }
 
-        // 語音朗讀核心函數
+        // 語音朗讀核心函數 (預設 0.8 倍速)
         function speakCurrentWord(e) {
             if (e) e.stopPropagation();
             speakText(words[currentIndex].en);
@@ -406,7 +434,7 @@
             speakText(words[currentIndex].ex);
         }
 
-        // 🚀 測驗發音（點擊題目單字即可重複收聽）
+        // 測驗發音
         function speakQuizWord(type) {
             if (type === 'quiz' && currentQuizWord) {
                 speakText(currentQuizWord.en);
@@ -419,6 +447,7 @@
             window.speechSynthesis.cancel();
             const u = new SpeechSynthesisUtterance(text);
             u.lang = 'en-US';
+            u.rate = 0.8; // 預設 0.8 倍速
             window.speechSynthesis.speak(u);
         }
 
@@ -502,7 +531,6 @@
             document.getElementById('quiz-question').innerText = `${currentQuizWord.en} 🔊`;
             document.getElementById('quiz-hint-box').innerText = currentQuizWord.ex;
 
-            // 🚀 題庫出現時自動朗讀
             speakText(currentQuizWord.en);
 
             let options = [currentQuizWord];
@@ -541,7 +569,6 @@
             document.getElementById('fav-quiz-question').innerText = `${currentFavQuizWord.en} 🔊`;
             document.getElementById('fav-quiz-hint-box').innerText = currentFavQuizWord.ex;
 
-            // 🚀 錯題題庫出現時自動朗讀
             speakText(currentFavQuizWord.en);
 
             let options = [currentFavQuizWord];
@@ -664,7 +691,6 @@
             renderNotesList();
         }
 
-        // 匯出筆記 JSON
         function exportNotesToJSON() {
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notes, null, 2));
             const downloadAnchor = document.createElement('a');
@@ -673,6 +699,22 @@
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
+        }
+
+        // 渲染字首清單
+        function renderPrefixList() {
+            const container = document.getElementById('prefix-list-container');
+            container.innerHTML = prefixData.map(item => `
+                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 15px; border-radius: 8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                        <span style="font-weight: bold; font-size: 1.1rem; color: #2563eb;">${item.prefix}</span>
+                        <span style="font-size: 0.9rem; font-weight: 600; color: #334155;">意涵：${item.meaning}</span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #475569; background-color: #ffffff; padding: 8px; border-radius: 6px; border: 1px dashed #cbd5e1;">
+                        💡 <strong>常考範例：</strong> ${item.example}
+                    </div>
+                </div>
+            `).join('');
         }
 
         // 啟動專案
